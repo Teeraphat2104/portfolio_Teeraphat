@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Skills } from "./components/Skills";
 import { Projects } from "./components/Projects";
-import type { Project } from "./components/Projects";
-import { ProjectDrawer } from "./components/ProjectDrawer";
+import { BarbershopDemoPage } from "./pages/BarbershopDemoPage";
 import { Experience } from "./components/Experience";
 import { Contact } from "./components/Contact";
 
 function App() {
-  // Read initial theme preference from localStorage or user device settings
+  const location = useLocation();
+  const isDemoPage = location.pathname === "/barbershop-demo";
+
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const saved = localStorage.getItem("theme");
     if (saved === "light" || saved === "dark") return saved;
@@ -19,15 +21,12 @@ function App() {
   });
 
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  // Sync theme with DOM element and save to localStorage
   useEffect(() => {
     const root = document.documentElement;
     root.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
 
-    // Set matching theme colors for background blurring in header
     if (theme === "dark") {
       root.style.setProperty("--bg-rgb", "10, 10, 10");
     } else {
@@ -41,26 +40,23 @@ function App() {
 
   return (
     <>
-      {/* Navigation */}
-      <Header theme={theme} toggleTheme={toggleTheme} />
+      <Header theme={theme} toggleTheme={toggleTheme} simple={isDemoPage} />
 
-      {/* Main Single Page Scroller Sections */}
-      <main style={{ marginTop: "64px" }}>
-        <Hero />
-        <Skills hoveredSkill={hoveredSkill} setHoveredSkill={setHoveredSkill} />
-        <Projects
-          hoveredSkill={hoveredSkill}
-          onSelectProject={setSelectedProject}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <main style={{ marginTop: "64px" }}>
+              <Hero />
+              <Skills hoveredSkill={hoveredSkill} setHoveredSkill={setHoveredSkill} />
+              <Projects hoveredSkill={hoveredSkill} />
+              <Experience />
+              <Contact />
+            </main>
+          }
         />
-        <Experience />
-        <Contact />
-      </main>
-
-      {/* Slide-out Technical Project Drawer */}
-      <ProjectDrawer
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+        <Route path="/barbershop-demo" element={<BarbershopDemoPage />} />
+      </Routes>
     </>
   );
 }

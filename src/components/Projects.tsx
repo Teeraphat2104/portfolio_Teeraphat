@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface Project {
   id: string;
@@ -16,7 +17,6 @@ export interface Project {
 
 interface ProjectsProps {
   hoveredSkill: string | null;
-  onSelectProject: (project: Project) => void;
 }
 
 export const projectsData: Project[] = [
@@ -46,20 +46,21 @@ export const projectsData: Project[] = [
 +-------------------------------------------------------------+
 |                      CLIENT BROWSER (Blade UI)              |
 +-------------------------------------------------------------+
-                               |
-                               | (HTTP/JSON APIs)
-                               v
+                                |
+                                | (HTTP/JSON APIs)
+                                v
 +-------------------------------------------------------------+
 |                     LARAVEL CORE APP                        |
 |   (BookingController, BarberController, POSBarber Module)   |
 +-------------------------------------------------------------+
-         |                                     |
-         v (Database Locks)                    v (Pest Sandbox)
+          |                                     |
+          v (Database Locks)                    v (Pest Sandbox)
 +------------------+                 +------------------+
 | PostgreSQL / DB  |                 |  Pest Test Suite |
 +------------------+                 +------------------+
 `,
-    github: 'https://github.com/example/Barbershop-Booking-Queue-Management-System'
+    github: 'https://github.com/example/Barbershop-Booking-Queue-Management-System',
+    demo: '/barbershop-demo'
   },
   {
     id: 'university_db',
@@ -87,13 +88,13 @@ export const projectsData: Project[] = [
 +-------------------------------------------------------------+
 |                     NGINX REVERSE PROXY                     |
 +-------------------------------------------------------------+
-                               |
-                               v (Docker Network)
+                                |
+                                v (Docker Network)
 +-------------------------------------------------------------+
 |                      LARAVEL APP CONTAINER                  |
 +-------------------------------------------------------------+
-         |                                     |
-         v (TCP connection)                    v (Volume Mount)
+          |                                     |
+          v (TCP connection)                    v (Volume Mount)
 +------------------+                 +------------------+
 | PostgreSQL Container |             | Local Asset Cache|
 +------------------+                 +------------------+
@@ -126,14 +127,14 @@ export const projectsData: Project[] = [
 +-------------------------------------------------------------+
 |                    ALUMNI CLIENT (Vite / TS)                |
 +-------------------------------------------------------------+
-                               |
-                               v (API Paths)
+                                |
+                                v (API Paths)
 +-------------------------------------------------------------+
 |                       BANDIT SYSTEM                         |
 |           (Route Profiling & Matchmaking Core)              |
 +-------------------------------------------------------------+
-         |                                     |
-         v (Eager Loading)                     v (Cache Sync)
+          |                                     |
+          v (Eager Loading)                     v (Cache Sync)
 +------------------+                 +------------------+
 | Database Cluster |                 | Memcached Store  |
 +------------------+                 +------------------+
@@ -142,7 +143,8 @@ export const projectsData: Project[] = [
   }
 ];
 
-export const Projects: React.FC<ProjectsProps> = ({ hoveredSkill, onSelectProject }) => {
+export const Projects: React.FC<ProjectsProps> = ({ hoveredSkill }) => {
+  const navigate = useNavigate();
   return (
     <section id="projects" className="section">
       <div className="container">
@@ -324,13 +326,14 @@ export const Projects: React.FC<ProjectsProps> = ({ hoveredSkill, onSelectProjec
                     alignItems: 'center',
                   }}
                 >
-                  <button onClick={() => onSelectProject(project)} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
-                    Explore Architecture
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                      <polyline points="12 5 19 12 12 19"></polyline>
-                    </svg>
-                  </button>
+                  {project.demo && (
+                    <button onClick={() => navigate(project.demo!)} className="btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                      </svg>
+                      Live Demo
+                    </button>
+                  )}
 
                   <a
                     href={project.github}
