@@ -5,12 +5,14 @@ import { Hero } from "./components/Hero";
 import { Skills } from "./components/Skills";
 import { Projects } from "./components/Projects";
 import { BarbershopDemoPage } from "./pages/BarbershopDemoPage";
+import { UniversityDemoPage } from "./pages/UniversityDemoPage";
+import { AlumniDemoPage } from "./pages/AlumniDemoPage";
 import { Experience } from "./components/Experience";
 import { Contact } from "./components/Contact";
 
 function App() {
   const location = useLocation();
-  const isDemoPage = location.pathname === "/barbershop-demo";
+  const isDemoPage = location.pathname === "/barbershop-demo" || location.pathname === "/university-demo" || location.pathname === "/alumni-demo";
 
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     const saved = localStorage.getItem("theme");
@@ -56,6 +58,8 @@ function App() {
           }
         />
         <Route path="/barbershop-demo" element={<BarbershopDemoPage />} />
+        <Route path="/university-demo" element={<UniversityDemoPage />} />
+        <Route path="/alumni-demo" element={<AlumniDemoPage />} />
       </Routes>
     </>
   );

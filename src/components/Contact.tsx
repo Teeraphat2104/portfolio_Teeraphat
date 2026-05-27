@@ -1,64 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
-  const [showToast, setShowToast] = useState(false);
-
-  const validate = () => {
-    const tempErrors: { [key: string]: string } = {};
-    if (!formData.name.trim()) tempErrors.name = 'Name is required';
-    
-    if (!formData.email.trim()) {
-      tempErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      tempErrors.email = 'Please provide a valid email address';
-    }
-    
-    if (!formData.message.trim()) {
-      tempErrors.message = 'Message is required';
-    } else if (formData.message.trim().length < 10) {
-      tempErrors.message = 'Message must be at least 10 characters';
-    }
-    
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear validation error when editing
-    if (errors[name]) {
-      setErrors((prev) => {
-        const next = { ...prev };
-        delete next[name];
-        return next;
-      });
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
-    setStatus('loading');
-
-    // Simulate standard server latency
-    setTimeout(() => {
-      setStatus('success');
-      setFormData({ name: '', email: '', message: '' });
-      setShowToast(true);
-      
-      // Auto-hide toast after 4 seconds
-      setTimeout(() => {
-        setShowToast(false);
-        setStatus('idle');
-      }, 4000);
-    }, 1500);
-  };
-
   return (
     <section id="contact" className="section" style={{ position: 'relative' }}>
       <div className="container">
@@ -148,36 +90,6 @@ export const Contact: React.FC = () => {
           </span>
         </div>
       </div>
-
-      {/* Floating Success Toast Alert */}
-      {showToast && (
-        <div
-          style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            backgroundColor: 'var(--toast-bg)',
-            color: 'var(--toast-text)',
-            padding: '1rem 2rem',
-            borderRadius: '6px',
-            boxShadow: 'var(--shadow)',
-            zIndex: 1000,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            border: '1px solid var(--border)',
-            fontFamily: 'var(--mono)',
-            fontSize: '0.8rem',
-            animation: 'toastIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#22c55e' }}>
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>STATUS: SUCCESS. PAYLOAD TRANSMITTED.</span>
-        </div>
-      )}
 
       <style>{`
         .spinner {

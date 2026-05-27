@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { ArchBox, ArchArrow } from './ArchDiagram';
 
 interface Barber { name: string; specialty: string; rating: number; }
 interface Service { name: string; price: number; duration: number; }
@@ -245,54 +246,86 @@ export const BarbershopDemoContent: React.FC = () => {
               ))}
             </div>
 
-            {/* Architecture Diagram */}
+            {/* Architecture Diagram — CSS Box Layout */}
             <div>
               <span style={{ fontFamily: 'var(--mono)', fontSize: '0.75rem', color: 'var(--text-tertiary)', display: 'block', marginBottom: '0.75rem' }}>
                 SYSTEM ARCHITECTURE
               </span>
-              <div
-                style={{
-                  backgroundColor: 'var(--code-bg)',
-                  border: '1px solid var(--border)',
-                  borderRadius: '6px',
-                  padding: '1.5rem',
-                  overflowX: 'auto',
-                }}
-              >
-                <pre style={{ fontFamily: 'var(--mono)', fontSize: '0.72rem', lineHeight: 1.5, color: 'var(--text-primary)', margin: 0 }}>
-{`┌──────────────────────────────────────────────────────────┐
-│                   CLIENT BROWSER (Blade + Bootstrap)        │
-│                   jQuery AJAX  •  Leaflet Maps              │
-│                   FullCalendar  •  Flatpickr                │
-└────────────────────────┬───────────────────────────────────┘
-                         │ 28 REST API Endpoints (JSON)
-                         ▼
-┌──────────────────────────────────────────────────────────┐
-│               LARAVEL 12 APPLICATION CORE                 │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌─────────────┐  │
-│  │ Booking  │ │  Barber  │ │  Shop    │ │  Auth/Admin  │  │
-│  │ Controller│ │Controller│ │Controller│ │  Controllers │  │
-│  └──────────┘ └──────────┘ └──────────┘ └─────────────┘  │
-│       │            │           │              │            │
-│       ▼            ▼           ▼              ▼            │
-│  ┌───────────────────────────────────────────────────┐     │
-│  │         Eloquent ORM  •  Validation  •  SoftDeletes│     │
-│  │         Role Auth (customer/barber/admin)          │     │
-│  └───────────────────────────────────────────────────┘     │
-└────────────────────────┬───────────────────────────────────┘
-                         │
-              ┌──────────┴──────────┐
-              ▼                     ▼
-┌──────────────────────┐  ┌──────────────────────┐
-│   PostgreSQL DB       │  │   Pest Test Suite    │
-│   (Haversine Index)   │  │   (126 tests, 6 files)│
-│   • shops             │  │   • CRUD validation   │
-│   • barbers           │  │   • Double-booking    │
-│   • services          │  │   • Status transitions│
-│   • bookings          │  │   • Revenue calc      │
-│   • notifications     │  │   • Geo queries       │
-└──────────────────────┘  └──────────────────────┘`}
-                </pre>
+
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                {/* ── CLIENT BROWSER ── */}
+                <ArchBox label="CLIENT BROWSER" badge="Presentation Layer">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', justifyContent: 'center' }}>
+                    {['Blade UI', 'jQuery AJAX', 'Leaflet.js Maps', 'FullCalendar', 'Flatpickr', 'Bootstrap 5'].map((t) => (
+                      <span key={t} style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', padding: '0.2rem 0.5rem', borderRadius: '4px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', color: 'var(--text-secondary)' }}>{t}</span>
+                    ))}
+                  </div>
+                </ArchBox>
+
+                {/* ── Connector 1 ── */}
+                <ArchArrow />
+
+                {/* ── LARAVEL CORE ── */}
+                <ArchBox label="LARAVEL 12 APPLICATION CORE" badge="API Layer">
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                    {[
+                      { name: 'Booking', desc: 'API' },
+                      { name: 'Barber', desc: 'API' },
+                      { name: 'Shop', desc: 'API' },
+                      { name: 'Auth / Admin', desc: 'API' },
+                    ].map((c) => (
+                      <div key={c.name} style={{ padding: '0.5rem 0.25rem', borderRadius: '4px', backgroundColor: 'var(--code-bg)', border: '1px solid var(--border)', textAlign: 'center', transition: 'all 0.2s' }}
+                        onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--text-primary)'; e.currentTarget.style.backgroundColor = 'var(--card-bg)'; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.backgroundColor = 'var(--code-bg)'; }}
+                      >
+                        <div style={{ fontFamily: 'var(--mono)', fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-primary)' }}>{c.name}</div>
+                        <div style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'var(--text-tertiary)', marginTop: '2px' }}>{c.desc}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ padding: '0.5rem 0.75rem', borderRadius: '4px', backgroundColor: 'var(--bg)', border: '1px solid var(--border)', display: 'flex', flexWrap: 'wrap', gap: '0.5rem', justifyContent: 'center', fontSize: '0.7rem' }}>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-secondary)' }}>Eloquent ORM</span>
+                    <span style={{ color: 'var(--border)' }}>|</span>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-secondary)' }}>SoftDeletes</span>
+                    <span style={{ color: 'var(--border)' }}>|</span>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-secondary)' }}>Role Auth (3 roles)</span>
+                    <span style={{ color: 'var(--border)' }}>|</span>
+                    <span style={{ fontFamily: 'var(--mono)', color: 'var(--text-secondary)' }}>28 REST Endpoints</span>
+                  </div>
+                </ArchBox>
+
+                {/* ── Connector 2 ── */}
+                <ArchArrow />
+
+                {/* ── Split: DB + Tests ── */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', width: '100%' }}>
+                  <ArchBox label="PostgreSQL Database" badge="Data">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.75rem' }}>
+                      {['shops (with Haversine index)', 'barbers (soft deletes)', 'services (with pricing)', 'bookings (queue order)', 'notifications (custom)'].map((item) => (
+                        <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'var(--text-tertiary)', flexShrink: 0 }} />
+                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', color: 'var(--text-primary)' }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </ArchBox>
+
+                  <ArchBox label="Pest Test Suite" badge="Quality">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.75rem' }}>
+                      {['126 tests across 6 files', 'CRUD validation (all 28 endpoints)', 'Double-booking prevention (3 tests)', 'Status transitions (lifecycle)', 'Revenue calculation (aggregate)', 'Haversine geo queries'].map((item) => (
+                        <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: 'var(--text-tertiary)', flexShrink: 0 }} />
+                          <span style={{ fontFamily: 'var(--mono)', fontSize: '0.65rem', color: 'var(--text-primary)' }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </ArchBox>
+                </div>
+
+                {/* ── API label ── */}
+                <div style={{ fontFamily: 'var(--mono)', fontSize: '0.6rem', color: 'var(--text-tertiary)', marginTop: '2px', letterSpacing: '0.1em' }}>
+                  28 API ENDPOINTS • 126 PEST TESTS
+                </div>
               </div>
             </div>
 

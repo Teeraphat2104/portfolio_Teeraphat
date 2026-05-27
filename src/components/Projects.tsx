@@ -99,7 +99,8 @@ export const projectsData: Project[] = [
 | PostgreSQL Container |             | Local Asset Cache|
 +------------------+                 +------------------+
 `,
-    github: 'https://github.com/example/university_db.app.local'
+    github: 'https://github.com/example/university_db.app.local',
+    demo: '/university-demo'
   },
   {
     id: 'alumni',
@@ -139,7 +140,8 @@ export const projectsData: Project[] = [
 | Database Cluster |                 | Memcached Store  |
 +------------------+                 +------------------+
 `,
-    github: 'https://github.com/example/alumni.app.local'
+    github: 'https://github.com/example/alumni.app.local',
+    demo: '/alumni-demo'
   }
 ];
 
