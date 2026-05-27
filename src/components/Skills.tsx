@@ -1,8 +1,18 @@
 import React from 'react';
+import {
+  SiHtml5, SiCss, SiJavascript, SiTypescript, SiGo, SiPhp,
+  SiNodedotjs, SiLaravel, SiExpress, SiGin, SiFastapi,
+  SiPostgresql, SiMysql, SiMongodb,
+  SiDocker, SiGithubactions,
+  SiReact, SiNextdotjs, SiTailwindcss, SiBootstrap, SiJquery, SiMui,
+  SiGit, SiGithub, SiPostman, SiFigma,
+} from 'react-icons/si';
+import { FaCode } from 'react-icons/fa';
+import { FiDatabase, FiServer, FiRefreshCw, FiTerminal, FiGitBranch, FiMessageSquare } from 'react-icons/fi';
+import type { IconType } from 'react-icons';
 
 interface Skill {
   name: string;
-  meter: string;
   level: string;
 }
 
@@ -16,46 +26,113 @@ interface SkillsProps {
   setHoveredSkill: (skill: string | null) => void;
 }
 
+const iconMap: Record<string, IconType> = {
+  HTML5: SiHtml5,
+  CSS3: SiCss,
+  JavaScript: SiJavascript,
+  TypeScript: SiTypescript,
+  Go: SiGo,
+  PHP: SiPhp,
+  SQL: FiDatabase,
+  'Node.js': SiNodedotjs,
+  Laravel: SiLaravel,
+  'Express.js': SiExpress,
+  'REST APIs': FiServer,
+  Gin: SiGin,
+  FastAPI: SiFastapi,
+  PostgreSQL: SiPostgresql,
+  MySQL: SiMysql,
+  MongoDB: SiMongodb,
+  Docker: SiDocker,
+  'GitHub Actions': SiGithubactions,
+  React: SiReact,
+  'Next.js': SiNextdotjs,
+  'Tailwind CSS': SiTailwindcss,
+  Bootstrap: SiBootstrap,
+  jQuery: SiJquery,
+  AJAX: FiRefreshCw,
+  'Material UI': SiMui,
+  'VS Code': FaCode,
+  Git: SiGit,
+  GitHub: SiGithub,
+  Lark: FiMessageSquare,
+  Postman: SiPostman,
+  Bruno: FiTerminal,
+  Fork: FiGitBranch,
+  Figma: SiFigma,
+};
+
+const levelDots: Record<string, string> = {
+  Expert: '···',
+  Advanced: '··',
+  Intermediate: '··',
+  Beginner: '·',
+};
+
 export const Skills: React.FC<SkillsProps> = ({ hoveredSkill, setHoveredSkill }) => {
   const skillCategories: SkillCategory[] = [
     {
       title: 'LANGUAGES',
       skills: [
-        { name: 'TypeScript', meter: '■■■■■■■■□□', level: 'Expert' },
-        { name: 'Go', meter: '■■■■■■■□□□', level: 'Advanced' },
-        { name: 'Rust', meter: '■■■■■□□□□□', level: 'Intermediate' },
-        { name: 'SQL', meter: '■■■■■■■■□□', level: 'Expert' },
-        { name: 'Python', meter: '■■■■■■□□□□', level: 'Advanced' },
+        { name: 'HTML5', level: 'Expert' },
+        { name: 'CSS3', level: 'Expert' },
+        { name: 'JavaScript', level: 'Advanced' },
+        { name: 'TypeScript', level: 'Advanced' },
+        { name: 'Go', level: 'Beginner' },
+        { name: 'PHP', level: 'Intermediate' },
+        { name: 'SQL', level: 'Beginner' },
       ],
     },
     {
       title: 'BACKEND / DISTRIBUTED',
       skills: [
-        { name: 'Node.js', meter: '■■■■■■■■□□', level: 'Expert' },
-        { name: 'gRPC', meter: '■■■■■■□□□□', level: 'Advanced' },
-        { name: 'WebSockets', meter: '■■■■■■■□□□', level: 'Advanced' },
-        { name: 'REST APIs', meter: '■■■■■■■■■□', level: 'Expert' },
-        { name: 'GraphQL', meter: '■■■■■■□□□□', level: 'Advanced' },
+        { name: 'Node.js', level: 'Beginner' },
+        { name: 'Laravel', level: 'Advanced' },
+        { name: 'Express.js', level: 'Beginner' },
+        { name: 'REST APIs', level: 'Expert' },
+        { name: 'Gin', level: 'Beginner' },
+        { name: 'FastAPI', level: 'Beginner' },
       ],
     },
     {
       title: 'DATABASES & CACHE',
       skills: [
-        { name: 'PostgreSQL', meter: '■■■■■■■■□□', level: 'Expert' },
-        { name: 'Redis', meter: '■■■■■■■□□□', level: 'Advanced' },
-        { name: 'MongoDB', meter: '■■■■■■□□□□', level: 'Advanced' },
-        { name: 'Kafka', meter: '■■■■■□□□□□', level: 'Intermediate' },
-        { name: 'Elasticsearch', meter: '■■■■■□□□□□', level: 'Intermediate' },
+        { name: 'PostgreSQL', level: 'Beginner' },
+        { name: 'MySQL', level: 'Advanced' },
+        { name: 'MongoDB', level: 'Beginner' },
       ],
     },
     {
       title: 'DEVOP & CLOUD',
       skills: [
-        { name: 'Docker', meter: '■■■■■■■□□□', level: 'Advanced' },
-        { name: 'Kubernetes', meter: '■■■■■□□□□□', level: 'Intermediate' },
-        { name: 'Terraform', meter: '■■■■■□□□□□', level: 'Intermediate' },
-        { name: 'AWS', meter: '■■■■■■□□□□', level: 'Advanced' },
-        { name: 'GitHub Actions', meter: '■■■■■■■□□□', level: 'Advanced' },
+        { name: 'Docker', level: 'Beginner' },
+        { name: 'GitHub Actions', level: 'Advanced' },
+      ],
+    },
+    {
+      title: 'Frameworks & LIBRARIES',
+      skills: [
+        { name: 'React', level: 'Expert' },
+        { name: 'Next.js', level: 'Intermediate' },
+        { name: 'Laravel', level: 'Intermediate' },
+        { name: 'Tailwind CSS', level: 'Advanced' },
+        { name: 'Bootstrap', level: 'Intermediate' },
+        { name: 'jQuery', level: 'Intermediate' },
+        { name: 'AJAX', level: 'Advanced' },
+        { name: 'Material UI', level: 'Beginner' },
+      ],
+    },
+    {
+      title: 'TOOLS & PLATFORMS',
+      skills: [
+        { name: 'VS Code', level: 'Expert' },
+        { name: 'Git', level: 'Advanced' },
+        { name: 'GitHub', level: 'Advanced' },
+        { name: 'Lark', level: 'Intermediate' },
+        { name: 'Postman', level: 'Beginner' },
+        { name: 'Bruno', level: 'Beginner' },
+        { name: 'Fork', level: 'Beginner' },
+        { name: 'Figma', level: 'Beginner' },
       ],
     },
   ];
@@ -78,26 +155,22 @@ export const Skills: React.FC<SkillsProps> = ({ hoveredSkill, setHoveredSkill })
           that specific system stack.
         </p>
 
-        <div className="grid-2">
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2.5rem',
+          }}
+        >
           {skillCategories.map((category, idx) => (
-            <div
-              key={idx}
-              style={{
-                border: '1px solid var(--border)',
-                borderRadius: '8px',
-                padding: '2rem',
-                backgroundColor: 'var(--card-bg)',
-              }}
-            >
+            <div key={idx}>
               <h3
                 style={{
                   fontFamily: 'var(--mono)',
-                  fontSize: '0.85rem',
-                  letterSpacing: '0.1em',
-                  color: 'var(--text-secondary)',
-                  marginBottom: '1.5rem',
-                  borderBottom: '1px dotted var(--border)',
-                  paddingBottom: '0.5rem',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.15em',
+                  color: 'var(--text-tertiary)',
+                  marginBottom: '1rem',
                 }}
               >
                 {category.title}
@@ -106,14 +179,15 @@ export const Skills: React.FC<SkillsProps> = ({ hoveredSkill, setHoveredSkill })
               <div
                 style={{
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
+                  flexWrap: 'wrap',
+                  gap: '0.5rem',
                 }}
               >
                 {category.skills.map((skill, sIdx) => {
                   const isHovered = hoveredSkill === skill.name;
                   const hasActiveSelection = hoveredSkill !== null;
                   const isDimmed = hasActiveSelection && !isHovered;
+                  const Icon = iconMap[skill.name];
 
                   return (
                     <div
@@ -121,52 +195,34 @@ export const Skills: React.FC<SkillsProps> = ({ hoveredSkill, setHoveredSkill })
                       onMouseEnter={() => setHoveredSkill(skill.name)}
                       onMouseLeave={() => setHoveredSkill(null)}
                       style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
+                        display: 'inline-flex',
                         alignItems: 'center',
-                        padding: '0.5rem 0.75rem',
-                        borderRadius: '4px',
-                        border: '1px solid transparent',
-                        backgroundColor: isHovered ? 'var(--code-bg)' : 'transparent',
-                        borderColor: isHovered ? 'var(--border)' : 'transparent',
-                        opacity: isDimmed ? 0.35 : 1,
-                        transform: isHovered ? 'translateX(4px)' : 'translateX(0)',
-                        transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                        gap: '0.5rem',
+                        padding: '0.4rem 0.85rem',
+                        borderRadius: '9999px',
+                        border: '1px solid',
+                        borderColor: isHovered ? 'var(--text-primary)' : 'var(--border)',
+                        backgroundColor: isHovered ? 'var(--accent)' : 'transparent',
+                        color: isHovered ? 'var(--bg)' : 'var(--text-primary)',
+                        opacity: isDimmed ? 0.3 : 1,
+                        fontSize: '0.85rem',
+                        fontWeight: 500,
+                        transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
                         cursor: 'pointer',
                       }}
                     >
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <span
-                          style={{
-                            fontWeight: 500,
-                            fontSize: '0.95rem',
-                            color: 'var(--text-primary)',
-                          }}
-                        >
-                          {skill.name}
-                        </span>
-                        <span
-                          style={{
-                            fontFamily: 'var(--mono)',
-                            fontSize: '0.7rem',
-                            color: 'var(--text-tertiary)',
-                          }}
-                        >
-                          {skill.level}
-                        </span>
-                      </div>
-
-                      {/* Monochrome block progress meter */}
+                      {Icon && <Icon size={14} />}
+                      <span>{skill.name}</span>
                       <span
                         style={{
                           fontFamily: 'var(--mono)',
-                          fontSize: '0.85rem',
-                          color: isHovered ? 'var(--text-primary)' : 'var(--text-secondary)',
-                          letterSpacing: '0.05em',
-                          transition: 'color 0.2s',
+                          fontSize: '0.7rem',
+                          letterSpacing: '0.1em',
+                          color: isHovered ? 'var(--bg)' : 'var(--text-tertiary)',
+                          lineHeight: 1,
                         }}
                       >
-                        [{skill.meter}]
+                        {levelDots[skill.level] || '·'}
                       </span>
                     </div>
                   );
