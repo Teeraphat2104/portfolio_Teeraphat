@@ -11,36 +11,16 @@ interface Position {
 export const Experience: React.FC = () => {
   const experiences: Position[] = [
     {
-      role: 'Senior Full-Stack Engineer',
-      company: 'Aether Systems Inc.',
-      duration: '2024 - PRESENT',
-      location: 'Remote, SF',
+      role: 'Full-Stack Developer (Intern)',
+      company: 'Airportels',
+      duration: '2025 - 2026',
+      location: 'Hybrid (Remote + Office, Nonthaburi, Thailand)',
       highlights: [
-        'Designed and coordinated migration of core monolithic transactional services into lightweight Go microservices connected via gRPC, achieving a 34% reduction in infrastructure operating costs.',
-        'Refactored analytical dashboard frontend utilizing React and a custom client virtualized list system, boosting large data set render times by 10x (interactive under 12ms).',
-        'Implemented distributed cache synchronization policies using Redis cluster and pub/sub nodes, reducing stale query occurrences on replicated database nodes to zero.',
-      ],
-    },
-    {
-      role: 'Software Systems Engineer',
-      company: 'Logicloud Global',
-      duration: '2022 - 2024',
-      location: 'Austin, TX',
-      highlights: [
-        'Built dynamic reverse proxy middleware in Rust with WebAssembly plugins to evaluate token-bucket rate limiting logic on active edge API gateways, preventing request flood outages.',
-        'Designed SQL transaction schemas and indexing architectures on PostgreSQL clusters, reducing concurrent deadlock occurrence rates by 95% under high-frequency writes.',
-        'Structured automated CI/CD validation checks via GitHub Actions and Terraform, decreasing deployment pipeline failures and cutting average cycle times down by 14 minutes.',
-      ],
-    },
-    {
-      role: 'Associate Software Developer',
-      company: 'Vector Code Labs',
-      duration: '2020 - 2022',
-      location: 'New York, NY',
-      highlights: [
-        'Developed full-stack web features using Node.js, Express, and React, building flexible user interaction workflows and secure JWT-based auth systems.',
-        'Optimized internal database search routines by incorporating Elasticsearch indexes, dropping search query response latency averages from 1.2s down to 85ms.',
-        'Collaborated with product designers to draft standard monochrome responsive layouts, yielding accessible interface compatibility across mobile web browsers.',
+        'Designed and implemented RESTful APIs for luggage check-in, storage tracking, and retrieval workflows used in live airport operations.',
+        'Architected the MySQL relational schema for storage slots, booking records, and customer data with integrity constraints.',
+        'Built interactive frontend views using React and Laravel Blade, integrating AJAX and jQuery for real-time status updates without page reloads.',
+        'Handled end-to-end request and response cycles, input validation, and error handling across the full stack.',
+        'Collaborated with team members via Git and Lark, participating in code reviews and iterative feature delivery.',
       ],
     },
   ];
