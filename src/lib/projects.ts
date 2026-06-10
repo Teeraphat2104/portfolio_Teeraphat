@@ -1,34 +1,39 @@
+import matter from 'gray-matter'
 import type { ProjectMeta, Project } from '../types'
-
-const mdxModules = import.meta.glob<{ frontmatter: ProjectMeta; default: string }>(
-  '/src/content/*.mdx',
-  { eager: true, query: { frontmatter: 'js' } }
-)
 
 const rawModules = import.meta.glob<string>(
   '/src/content/*.mdx',
   { eager: true, query: '?raw' }
 )
 
+function parseProjectMeta(path: string, raw: string): ProjectMeta {
+  const { data } = matter(raw)
+  const id = path.split('/').pop()?.replace('.mdx', '') ?? 'unknown'
+  return {
+    id,
+    title: data.title ?? id,
+    role: data.role ?? '',
+    description: data.description ?? '',
+    technologies: data.technologies ?? [],
+    metrics: data.metrics ?? [],
+    challenges: data.challenges ?? [],
+    github: data.github ?? '',
+    demo: data.demo ?? undefined,
+  }
+}
+
 export function getAllProjectMetas(): ProjectMeta[] {
-  return Object.entries(mdxModules)
-    .map(([path, mod]) => ({
-      ...mod.frontmatter,
-      id: path.split('/').pop()?.replace('.mdx', '') ?? 'unknown',
-    }))
+  return Object.entries(rawModules)
+    .map(([path, raw]) => parseProjectMeta(path, raw))
     .sort((a, b) => a.title.localeCompare(b.title))
 }
 
 export function getProjectById(id: string): Project | undefined {
-  const mdxPath = Object.keys(mdxModules).find((p) => p.includes(`/${id}.mdx`))
-  const rawPath = Object.keys(rawModules).find((p) => p.includes(`/${id}.mdx`))
-
-  if (!mdxPath || !rawPath) return undefined
-
-  const mod = mdxModules[mdxPath]
-  return {
-    ...mod.frontmatter,
-    id,
-    content: rawModules[rawPath],
-  }
+  const entry = Object.entries(rawModules).find(([path]) =>
+    path.includes(`/${id}.mdx`)
+  )
+  if (!entry) return undefined
+  const [path, raw] = entry
+  const meta = parseProjectMeta(path, raw)
+  return { ...meta, content: raw }
 }
