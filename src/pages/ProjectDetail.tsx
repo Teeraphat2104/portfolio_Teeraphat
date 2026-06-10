@@ -49,9 +49,17 @@ const markdownComponents: Components = {
     }
     if (lang === 'json' || lang === 'yaml' || lang === 'bash' || lang === 'ts' || lang === 'tsx') {
       return (
-        <pre className="bg-neutral-900 text-neutral-100 rounded-lg p-5 overflow-x-auto mb-6 text-[0.85rem] leading-relaxed font-mono">
-          <code>{children}</code>
-        </pre>
+        <div className="mb-6">
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-neutral-800 rounded-t-lg border-b border-neutral-700">
+            <span className="w-2 h-2 rounded-full bg-red-500/60" />
+            <span className="w-2 h-2 rounded-full bg-yellow-500/60" />
+            <span className="w-2 h-2 rounded-full bg-green-500/60" />
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-neutral-400 ml-2">{lang}</span>
+          </div>
+          <pre className="bg-neutral-900 text-neutral-100 rounded-b-lg p-5 overflow-x-auto text-[0.85rem] leading-relaxed font-mono">
+            <code>{children}</code>
+          </pre>
+        </div>
       )
     }
     return (
