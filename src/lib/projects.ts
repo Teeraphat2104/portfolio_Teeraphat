@@ -2,8 +2,8 @@ import { parse } from 'yaml'
 import type { ProjectMeta, Project } from '../types'
 
 const rawModules = import.meta.glob<string>(
-  '/src/content/*.mdx',
-  { eager: true, query: '?raw' }
+  '/src/content/*.md',
+  { eager: true, query: '?raw', import: 'default' }
 )
 
 function extractFrontmatter(raw: string): Record<string, unknown> {
@@ -18,7 +18,7 @@ function removeFrontmatter(raw: string): string {
 
 function parseProjectMeta(path: string, raw: string): ProjectMeta {
   const data = extractFrontmatter(raw)
-  const id = path.split('/').pop()?.replace('.mdx', '') ?? 'unknown'
+  const id = path.split('/').pop()?.replace('.md', '') ?? 'unknown'
   return {
     id,
     title: (data.title as string) ?? id,
@@ -40,7 +40,7 @@ export function getAllProjectMetas(): ProjectMeta[] {
 
 export function getProjectById(id: string): Project | undefined {
   const entry = Object.entries(rawModules).find(([path]) =>
-    path.includes(`/${id}.mdx`)
+    path.includes(`/${id}.md`)
   )
   if (!entry) return undefined
   const [path, raw] = entry
