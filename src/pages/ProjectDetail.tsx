@@ -6,6 +6,54 @@ import type { Components } from 'react-markdown'
 import { getProjectById } from '../lib/projects'
 import { MermaidRenderer } from '../components/MermaidRenderer'
 
+function highlightJsonLike(code: string): string {
+  const esc = code
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+
+  return esc.split('\n').map(line => {
+    const tokens: string[] = []
+    let i = 0
+    while (i < line.length) {
+      const rest = line.slice(i)
+      const key = rest.match(/^("(?:[^"\\]|\\.)*?")\s*(?=:)/)
+      if (key) {
+        tokens.push(`<span class="text-blue-600">${key[1]}</span>`)
+        i += key[0].length
+        continue
+      }
+      const str = rest.match(/^"(?:[^"\\]|\\.)*?"/)
+      if (str) {
+        tokens.push(`<span class="text-emerald-600">${str[0]}</span>`)
+        i += str[0].length
+        continue
+      }
+      const typ = rest.match(/^(boolean|string|number|object|array|null|undefined|never|any|void|symbol|bigint|true|false)\b/)
+      if (typ) {
+        tokens.push(`<span class="text-violet-600">${typ[0]}</span>`)
+        i += typ[0].length
+        continue
+      }
+      const num = rest.match(/^(\d+\.?\d*)\b/)
+      if (num) {
+        tokens.push(`<span class="text-amber-600">${num[0]}</span>`)
+        i += num[0].length
+        continue
+      }
+      const com = rest.match(/^(\/\/.*)/)
+      if (com) {
+        tokens.push(`<span class="text-neutral-400 italic">${com[0]}</span>`)
+        i += com[0].length
+        continue
+      }
+      tokens.push(line[i])
+      i++
+    }
+    return tokens.join('')
+  }).join('\n')
+}
+
 const markdownComponents: Components = {
   h1: ({ children }) => (
     <h1 className="text-2xl font-semibold text-neutral-900 mt-10 mb-4 tracking-tight">{children}</h1>
@@ -50,14 +98,14 @@ const markdownComponents: Components = {
     if (lang === 'json' || lang === 'yaml' || lang === 'bash' || lang === 'ts' || lang === 'tsx') {
       return (
         <div className="mb-6">
-          <div className="flex items-center gap-2 px-4 py-1.5 bg-neutral-800 rounded-t-lg border-b border-neutral-700">
-            <span className="w-2 h-2 rounded-full bg-red-500/60" />
-            <span className="w-2 h-2 rounded-full bg-yellow-500/60" />
-            <span className="w-2 h-2 rounded-full bg-green-500/60" />
-            <span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-neutral-400 ml-2">{lang}</span>
+          <div className="flex items-center gap-2 px-4 py-1.5 bg-neutral-100 rounded-t-lg border border-neutral-200 border-b-0">
+            <span className="w-2 h-2 rounded-full bg-red-400" />
+            <span className="w-2 h-2 rounded-full bg-yellow-400" />
+            <span className="w-2 h-2 rounded-full bg-green-400" />
+            <span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-neutral-500 ml-2">{lang}</span>
           </div>
-          <pre className="bg-neutral-900 text-neutral-100 rounded-b-lg p-5 overflow-x-auto text-[0.85rem] leading-relaxed font-mono">
-            <code>{children}</code>
+          <pre className="bg-white border border-neutral-200 rounded-b-lg p-5 overflow-x-auto text-[0.85rem] leading-relaxed font-mono">
+            <code dangerouslySetInnerHTML={{ __html: highlightJsonLike(String(children)) }} />
           </pre>
         </div>
       )
