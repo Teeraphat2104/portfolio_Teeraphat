@@ -1,4 +1,4 @@
-import matter from 'gray-matter'
+import { parse } from 'yaml'
 import type { ProjectMeta, Project } from '../types'
 
 const rawModules = import.meta.glob<string>(
@@ -6,19 +6,29 @@ const rawModules = import.meta.glob<string>(
   { eager: true, query: '?raw' }
 )
 
+function extractFrontmatter(raw: string): Record<string, unknown> {
+  const match = raw.match(/^---\n([\s\S]*?)\n---/)
+  if (!match) return {}
+  return parse(match[1]) as Record<string, unknown>
+}
+
+function removeFrontmatter(raw: string): string {
+  return raw.replace(/^---\n[\s\S]*?\n---\n*/, '')
+}
+
 function parseProjectMeta(path: string, raw: string): ProjectMeta {
-  const { data } = matter(raw)
+  const data = extractFrontmatter(raw)
   const id = path.split('/').pop()?.replace('.mdx', '') ?? 'unknown'
   return {
     id,
-    title: data.title ?? id,
-    role: data.role ?? '',
-    description: data.description ?? '',
-    technologies: data.technologies ?? [],
-    metrics: data.metrics ?? [],
-    challenges: data.challenges ?? [],
-    github: data.github ?? '',
-    demo: data.demo ?? undefined,
+    title: (data.title as string) ?? id,
+    role: (data.role as string) ?? '',
+    description: (data.description as string) ?? '',
+    technologies: (data.technologies as string[]) ?? [],
+    metrics: (data.metrics as { label: string; value: string }[]) ?? [],
+    challenges: (data.challenges as { problem: string; solution: string }[]) ?? [],
+    github: (data.github as string) ?? '',
+    demo: (data.demo as string) ?? undefined,
   }
 }
 
@@ -35,5 +45,5 @@ export function getProjectById(id: string): Project | undefined {
   if (!entry) return undefined
   const [path, raw] = entry
   const meta = parseProjectMeta(path, raw)
-  return { ...meta, content: raw }
+  return { ...meta, content: removeFrontmatter(raw) }
 }
