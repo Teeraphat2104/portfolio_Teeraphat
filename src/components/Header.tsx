@@ -1,243 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 interface HeaderProps {
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
-  simple?: boolean;
+  simple?: boolean
 }
 
-export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme, simple }) => {
-  const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState('hero');
-  const [isScrolled, setIsScrolled] = useState(false);
+export const Header: React.FC<HeaderProps> = ({ simple }) => {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    if (simple) return;
+    if (simple) return
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [simple])
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const sections = ['hero', 'skills', 'projects', 'experience', 'contact'];
-      const scrollPosition = window.scrollY + 100;
-
-      for (const section of sections) {
-        const el = document.getElementById(section);
-        if (el) {
-          const top = el.offsetTop;
-          const height = el.offsetHeight;
-          if (scrollPosition >= top && scrollPosition < top + height) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [simple]);
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const navLinks = [
+    { path: '/', label: 'HOME' },
+    { path: '/projects', label: 'PROJECTS' },
+    { path: '/about', label: 'ABOUT' },
+    { path: '/contact', label: 'CONTACT' },
+  ]
 
   return (
     <header
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: '64px',
-        zIndex: 100,
-        backgroundColor: isScrolled || simple ? 'rgba(var(--bg-rgb, 10, 10, 10), 0.75)' : 'transparent',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: isScrolled || simple ? '1px solid var(--border)' : '1px solid transparent',
-        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        display: 'flex',
-        alignItems: 'center',
-      }}
+      className={`fixed top-0 left-0 right-0 h-16 z-50 transition-all duration-300 ${
+        isScrolled || simple
+          ? 'bg-white/75 backdrop-blur-xl border-b border-neutral-200'
+          : 'bg-transparent border-b border-transparent'
+      }`}
     >
-      <div
-        className="container"
-        style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        {/* Monogram Monospace Title */}
-        <a
-          href={simple ? undefined : '#hero'}
-          onClick={(e) => {
-            if (simple) {
-              e.preventDefault();
-              navigate('/');
-            } else {
-              e.preventDefault();
-              scrollTo('hero');
-            }
-          }}
-          style={{
-            fontFamily: 'var(--mono)',
-            fontWeight: 600,
-            fontSize: '0.95rem',
-            letterSpacing: '-0.05em',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            color: 'var(--text-primary)',
-            textDecoration: 'none',
-            cursor: 'pointer',
-          }}
+      <div className="max-w-[1000px] mx-auto px-6 h-full flex items-center justify-between">
+        <Link
+          to="/"
+          className="font-mono font-semibold text-[0.95rem] tracking-tight flex items-center gap-1.5 text-neutral-900 hover:opacity-60 transition-opacity"
         >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              backgroundColor: 'var(--text-primary)',
-              borderRadius: '50%',
-            }}
-          />
+          <span className="w-2 h-2 bg-neutral-900 rounded-full" />
           {simple ? '<- TEERAPHAT.SYS[ENG]' : 'TEERAPHAT.SYS[ENG]'}
-        </a>
+        </Link>
 
         {simple ? (
           <button
-            onClick={toggleTheme}
-            style={{
-              background: 'none',
-              border: '1px solid var(--border)',
-              borderRadius: '4px',
-              width: '32px',
-              height: '32px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--text-primary)',
-              transition: 'border-color 0.2s, background-color 0.2s',
-              cursor: 'pointer',
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--text-primary)')}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
-            title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-            aria-label="Toggle Theme"
+            onClick={() => navigate('/')}
+            className="font-mono text-xs text-neutral-500 hover:text-neutral-900 transition-colors"
           >
-            {theme === 'light' ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-            )}
+            {'<- BACK'}
           </button>
         ) : (
-          <nav
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1.75rem',
-            }}
-          >
-            <ul
-              style={{
-                display: 'flex',
-                listStyle: 'none',
-                gap: '1.25rem',
-                fontSize: '0.85rem',
-                fontWeight: 500,
-                fontFamily: 'var(--sans)',
-              }}
-              className="nav-links"
-            >
-              {[
-                { id: 'skills', label: 'SKILLS' },
-                { id: 'projects', label: 'PROJECTS' },
-                { id: 'experience', label: 'EXPERIENCE' },
-                { id: 'contact', label: 'CONTACT' },
-              ].map((item) => (
-                <li key={item.id}>
-                  <a
-                    href={`#${item.id}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollTo(item.id);
-                    }}
-                    style={{
-                      color: activeSection === item.id ? 'var(--text-primary)' : 'var(--text-secondary)',
-                      transition: 'color 0.2s',
-                      position: 'relative',
-                      padding: '4px 0',
-                    }}
-                  >
-                    {item.label}
-                    {activeSection === item.id && (
-                      <span
-                        style={{
-                          position: 'absolute',
-                          bottom: 0,
-                          left: 0,
-                          right: 0,
-                          height: '1px',
-                          backgroundColor: 'var(--text-primary)',
-                          display: 'block',
-                        }}
-                      />
-                    )}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            <div
-              style={{
-                width: '1px',
-                height: '16px',
-                backgroundColor: 'var(--border)',
-                margin: '0 4px',
-              }}
-            />
-
-            <button
-              onClick={toggleTheme}
-              style={{
-                background: 'none',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--text-primary)',
-                transition: 'border-color 0.2s, background-color 0.2s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'var(--text-primary)')}
-              onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
-              title={`Switch to ${theme === 'light' ? 'Dark' : 'Light'} Mode`}
-              aria-label="Toggle Theme"
-            >
-              {theme === 'light' ? (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-              ) : (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-              )}
-            </button>
+          <nav className="hidden md:flex items-center gap-7">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`text-sm font-medium transition-colors relative py-1 ${
+                  location.pathname === link.path
+                    ? 'text-neutral-900'
+                    : 'text-neutral-500 hover:text-neutral-900'
+                }`}
+              >
+                {link.label}
+                {location.pathname === link.path && (
+                  <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-neutral-900 block" />
+                )}
+              </Link>
+            ))}
           </nav>
         )}
       </div>
-
-      {!simple && <style>{`
-        @media (max-width: 768px) {
-          .nav-links {
-            display: none !important;
-          }
-        }
-      `}</style>}
     </header>
-  );
-};
+  )
+}
