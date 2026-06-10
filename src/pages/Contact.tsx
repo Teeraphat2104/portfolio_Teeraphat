@@ -12,8 +12,8 @@ export const Contact: React.FC = () => {
     },
     {
       label: 'LinkedIn',
-      value: 'linkedin.com/in/teeraphat',
-      href: 'https://linkedin.com/in/teeraphat',
+      value: 'linkedin.com/in/teeraphat-lansantahd-a99166385',
+      href: 'https://www.linkedin.com/in/teeraphat-lansantahd-a99166385/',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -24,8 +24,8 @@ export const Contact: React.FC = () => {
     },
     {
       label: 'Email',
-      value: 'teeraphat@example.com',
-      href: 'mailto:teeraphat@example.com',
+      value: 'tlansantad@gmail.com',
+      href: 'mailto:tlansantad@gmail.com',
       icon: (
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
