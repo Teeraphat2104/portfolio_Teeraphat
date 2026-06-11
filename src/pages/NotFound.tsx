@@ -1,17 +1,24 @@
 import { Link } from 'react-router-dom'
+import { Container } from '../components/Container'
 
 export const NotFound: React.FC = () => {
-  return (
-    <div className="max-w-[1000px] mx-auto px-6 pt-32 text-center animate-[fadeIn_0.8s_ease-out]">
-      <span className="font-mono text-[5rem] font-bold text-neutral-200 leading-none block mb-4">404</span>
-      <h1 className="text-2xl font-semibold text-neutral-900 mb-4">Page not found</h1>
-      <p className="text-neutral-500 mb-8">The page you are looking for does not exist or has been moved.</p>
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 bg-neutral-900 text-white px-5 py-2.5 rounded text-sm font-medium transition-all hover:bg-neutral-800"
-      >
-        ← Back to Home
-      </Link>
-    </div>
-  )
+ return (
+ <div className="pt-32 animate-[fadeIn_0.8s_ease-out]">
+ <Container>
+ <div className="text-center">
+ <span className="font-mono text-[8rem] font-bold text-gray-200 leading-none block mb-4">404</span>
+ <h1 className="text-3xl font-bold text-gray-800 mb-4">Page not found</h1>
+ <p className="text-gray-500 mb-8 max-w-md mx-auto">
+ The page you are looking for does not exist or has been moved.
+ </p>
+ <Link
+ to="/"
+ className="relative inline-flex h-11 items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95"
+ >
+ <span className="relative text-base font-semibold text-white">← Back to Home</span>
+ </Link>
+ </div>
+ </Container>
+ </div>
+ )
 }
