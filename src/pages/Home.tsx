@@ -9,9 +9,13 @@ export const Home: React.FC = () => {
   const featured = projects.slice(0, 3)
 
   const words = [
-    'DISTRIBUTED SYSTEMS DESIGN',
     'FULL-STACK ARCHITECTURE',
+    'FRONT-END ARCHITECTURE',
+    'BACK-END ARCHITECTURE',
     'CLOUD ARCHITECTURE & OPS',
+    'SCALABLE SYSTEMS',
+    'DATABASE DESIGN',
+    'API DESIGN',
     'HIGH-PERFORMANCE APPLICATIONS',
   ]
   const [index, setIndex] = useState(0)

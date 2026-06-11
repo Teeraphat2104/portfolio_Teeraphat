@@ -29,7 +29,7 @@ flowchart TB
     Booking[BookingController]
     Barber[BarberController]
     POS[POSBarber Module]
-    DB[(PostgreSQL)]
+    DB[(MySQL)]
     Pest[Pest Test Suite]
 
     Client --> API --> Laravel
