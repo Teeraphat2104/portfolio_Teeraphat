@@ -1,38 +1,10 @@
----
-title: University Database System
-role: Full-Stack Developer & Architect
-description: A full-featured PDF management and archiving platform for university academic documents, featuring role-based access control, dual file storage strategy, and Thai language support — built with Next.js 16, MongoDB, and Prisma.
-technologies: [Next.js 16, TypeScript, MongoDB, Prisma, Docker, NextAuth v5, Tailwind CSS]
-metrics:
-  - label: STORAGE STRATEGY
-    value: Dual (Vercel Blob / Local)
-  - label: AUTH TIERS
-    value: 3-Tier RBAC
-  - label: FILE LIMIT
-    value: 50 MB Configurable
-  - label: SEARCH
-    value: Regex Multi-Field
-challenges:
-  - problem: MongoDB lacks native JOINs, making relational queries with Prisma's MongoDB provider limited compared to SQL providers.
-    solution: Used embedded ObjectId references with Prisma's `include` for eager-loading related documents across User→Pdf and Category→Pdf relationships.
-  - problem: The system must work both in development (no cloud blob token) and production (Vercel Blob), requiring a transparent fallback strategy.
-    solution: Abstracted storage behind a single `filePath` field; download logic checks if path is a blob URL or local path, then redirects or streams accordingly.
-  - problem: Permissions must be enforced at middleware, Server Components, API routes, and client UI — four separate layers with consistent rules.
-    solution: Four-layer enforcement — proxy middleware blocks routes, Server Actions check auth() before mutations, API routes verify roles, client components conditionally render UI from session props.
-  - problem: Thai characters require specific font loading, and MongoDB text search doesn't support Thai word segmentation natively.
-    solution: Loaded Noto Sans Thai via next/font, used regex-based matching on title/description instead of MongoDB text indexes to avoid Thai segmentation complexity.
-github: https://github.com/example/university-database-system
-demo: https://university-database-system.vercel.app/
----
+# University Database System — Architecture
 
-# 🏗️ University Database System — Architecture
-
-> **A production-grade PDF management platform purpose-built for university academic document workflows.**
-> This document covers system architecture, data flow, user roles, and design decisions.
+A production-grade PDF management platform purpose-built for university academic document workflows. This document covers system architecture, data flow, user roles, and design decisions.
 
 ---
 
-## 📂 Project Architecture
+## Project Architecture
 
 ### High-Level Structure
 
@@ -54,12 +26,12 @@ university-database-system/
 
 ### Route Grouping
 
-| Group        | Path                                                         | Auth Required     | Description                                                   |
-|--------------|--------------------------------------------------------------|-------------------|---------------------------------------------------------------|
-| `(app)/`     | `/dashboard`, `/pdfs`, `/categories`, `/admins`, `/settings` | Yes (Editor/Admin) | Authenticated app shell with sidebar + topbar                 |
-| `(auth)/`    | `/login`                                                     | No                | Login page (redirects to dashboard if already authenticated)  |
-| `browse/`    | `/browse/categories`, `/browse/pdfs/[id]`, `/browse/search`  | No                | Public-facing browse and search                               |
-| `api/`       | `/api/auth/*`, `/api/pdf/*`, `/api/category/*`               | Mixed             | Route handlers for AJAX calls and file serving                |
+| Group | Path | Auth Required | Description |
+|-------|------|--------------|-------------|
+| `(app)/` | `/dashboard`, `/pdfs`, `/categories`, `/admins`, `/settings` | Yes (Editor/Admin) | Authenticated app shell with sidebar + topbar |
+| `(auth)/` | `/login` | No | Login page (redirects to dashboard if already authenticated) |
+| `browse/` | `/browse/categories`, `/browse/pdfs/[id]`, `/browse/search` | No | Public-facing browse and search |
+| `api/` | `/api/auth/*`, `/api/pdf/*`, `/api/category/*` | Mixed | Route handlers for AJAX calls and file serving |
 
 ### Data-Fetching Strategy (Hybrid)
 
@@ -81,98 +53,50 @@ Middleware (`src/proxy.ts`) uses NextAuth's `authorized` callback to enforce thr
 
 ---
 
-## 🛠 Tech Stack
+## Tech Stack
 
-### Core Frameworks
+**Core Frameworks:** Next.js 16, React 19, TypeScript 5, Node.js 20 (Alpine)
 
-| Technology     | Version       | Purpose                     |
-|----------------|---------------|-----------------------------|
-| **Next.js**    | 16.2.6        | React meta-framework (App Router) |
-| **React**      | 19.2.4        | UI library                  |
-| **TypeScript** | ^5            | Type safety                 |
-| **Node.js**    | 20 (Alpine)   | Runtime                     |
+**Styling & UI:** Tailwind CSS v4, shadcn/ui, @base-ui/react, @tabler/icons-react, lucide-react, framer-motion, Geist/Geist_Mono/Noto_Sans_Thai via next/font
 
-### Styling & UI
+**Database & ORM:** MongoDB Atlas, Prisma, @auth/prisma-adapter
 
-| Library                        | Purpose                              |
-|--------------------------------|--------------------------------------|
-| **Tailwind CSS** v4            | Utility-first CSS framework          |
-| **shadcn/ui** (base-nova)      | UI primitives (button, input, select, sheet, sidebar, etc.) |
-| **@base-ui/react** ^1.5.0      | Headless UI primitives               |
-| **@tabler/icons-react** ^3.44.0 | Icon library                        |
-| **lucide-react** ^1.16.0       | Additional icons                     |
-| **framer-motion** ^12.40.0     | Animations                           |
-| **Geist / Geist_Mono / Noto_Sans_Thai** | Typography via `next/font` |
-| **class-variance-authority + clsx + tailwind-merge** | Class name management (`cn()` utility) |
+**Authentication:** next-auth v5 with Credentials provider, bcryptjs, JWT session strategy
 
-### Database & ORM
+**File Storage:** Vercel Blob (primary with @vercel/blob), Local filesystem (fallback to `uploads/` directory)
 
-| Library                      | Purpose                        |
-|------------------------------|--------------------------------|
-| **MongoDB Atlas**            | NoSQL database                 |
-| **Prisma** ^6.19.0           | ORM with MongoDB provider      |
-| **@auth/prisma-adapter** ^2.11.2 | NextAuth session adapter    |
+**Forms & Validation:** react-hook-form, @hookform/resolvers (Zod integration), zod, react-dropzone
 
-### Authentication
-
-| Library                      | Purpose                                 |
-|------------------------------|-----------------------------------------|
-| **next-auth** ^5.0.0-beta.31 | Auth.js v5 with Credentials provider    |
-| **bcryptjs** ^3.0.3          | Password hashing                        |
-| **JWT session strategy**     | Stateless session tokens                |
-
-### File Storage
-
-| Strategy                    | Provider               | Condition                        |
-|-----------------------------|------------------------|----------------------------------|
-| **Vercel Blob** (primary)   | `@vercel/blob` ^2.4.0  | When `BLOB_READ_WRITE_TOKEN` is set |
-| **Local filesystem** (fallback) | `uploads/` directory | When blob token is unavailable   |
-
-### Forms & Validation
-
-| Library                      | Purpose                           |
-|------------------------------|-----------------------------------|
-| **react-hook-form** ^7.76.1  | Form state management             |
-| **@hookform/resolvers** ^5.4.0 | Zod integration                 |
-| **zod** ^4.4.3               | Schema validation                 |
-| **react-dropzone** ^15.0.0   | Drag-and-drop file upload         |
-
-### Infrastructure
-
-| Component              | Purpose                                       |
-|------------------------|-----------------------------------------------|
-| **Docker** + **Dockerfile** | Application container                    |
-| **nginx**              | Reverse proxy, SSL termination, HTTP/2        |
-| **docker-compose**     | Multi-service orchestration (app + nginx)     |
+**Infrastructure:** Docker + Dockerfile, nginx reverse proxy with SSL, docker-compose
 
 ---
 
-## 🔄 System Architecture
+## System Architecture
 
 ### Component Diagram
 
 ```mermaid
 flowchart TB
-    subgraph Client["🌐 Browser (Client)"]
+    subgraph Client["Browser (Client)"]
         UI[Next.js App Shell]
     end
 
-    subgraph Proxy["🔒 Reverse Proxy"]
+    subgraph Proxy["Reverse Proxy"]
         NGINX["nginx\nSSL + HTTP/2"]
     end
 
-    subgraph Server["⚡ Next.js Server (App Router)"]
+    subgraph Server["Next.js Server (App Router)"]
         direction TB
-        Prisma["🗄️ Prisma ORM"]
-        Auth["🔑 NextAuth v5\nCredentials + JWT"]
-        Storage["💾 File Storage"]
-        Blob["☁️ Vercel Blob"]
-        LocalFS["📁 Local FS"]
+        Prisma["Prisma ORM"]
+        Auth["NextAuth v5\nCredentials + JWT"]
+        Storage["File Storage"]
+        Blob["Vercel Blob"]
+        LocalFS["Local FS"]
         Storage --- Blob
         Storage --- LocalFS
     end
 
-    subgraph DB["📀 MongoDB Atlas"]
+    subgraph DB["MongoDB Atlas"]
         Mongo[(MongoDB)]
     end
 
@@ -268,7 +192,7 @@ flowchart LR
 
 ---
 
-## 📥 System Flow
+## System Flow
 
 ### 4.1 PDF Upload Flow
 
@@ -353,30 +277,30 @@ flowchart TD
 
 ---
 
-## 👤 User Flow
+## User Flow
 
 ### 5.1 Public User (No Login)
 
 ```mermaid
 flowchart LR
-    subgraph Landing["🏠 Landing"]
+    subgraph Landing["Landing"]
         L1[View hero section\nwith site stats]
         L2[Browse category\nshowcase]
         L3[See recent PDFs]
     end
 
-    subgraph Search["🔍 Search"]
+    subgraph Search["Search"]
         S1[Enter keywords]
         S2[Filter by\ncategory / year / month]
         S3[Browse results grid]
     end
 
-    subgraph Browse["📂 Browse"]
+    subgraph Browse["Browse"]
         B1[View all categories\nas cards]
         B2[Click category\nsee PDFs in it]
     end
 
-    subgraph View["📄 View PDF"]
+    subgraph View["View PDF"]
         V1[See PDF metadata\ncategory, year, month, description]
         V2[Preview PDF in iframe]
         V3[Download file]
@@ -415,20 +339,20 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    subgraph Categories["📑 Categories /categories"]
+    subgraph Categories["Categories /categories"]
         C1[View all categories]
         C2[Create new\nname + optional image]
         C3[Edit name / image]
         C4[Delete with confirmation]
     end
 
-    subgraph Admins["👥 Admins /admins"]
+    subgraph Admins["Admins /admins"]
         A1[View all users\neditors + admins]
         A2[Create new user\nname, email, password, role]
         A3[Delete user]
     end
 
-    subgraph Settings["⚙️ Settings /settings"]
+    subgraph Settings["Settings /settings"]
         S1[General tab\nsite name, description, footer]
         S2[Upload tab\nmax file size, allowed types]
         S3[Contact tab\nemail, phone, address, Facebook,\nLine ID, map]
@@ -443,19 +367,19 @@ flowchart TD
 
 ---
 
-## 🧩 Challenges & Solutions
+## Challenges & Solutions
 
 ### 6.1 MongoDB + Prisma Relationship Mapping
 
-> **Problem:** MongoDB is document-based with no native JOINs. Prisma with MongoDB provider has limited relationship support compared to SQL providers.
+MongoDB is document-based with no native JOINs. Prisma with MongoDB provider has limited relationship support compared to SQL providers.
 
-**Solution:** Used embedded references (ObjectId strings) and Prisma's `@map` to handle one-to-many relationships (User → Pdf, Category → Pdf). Queries use Prisma's `include` to eagerly load related documents. All IDs follow MongoDB ObjectId format.
+**Solution:** Used embedded references (ObjectId strings) and Prisma's `@map` to handle one-to-many relationships (User to Pdf, Category to Pdf). Queries use Prisma's `include` to eagerly load related documents. All IDs follow MongoDB ObjectId format.
 
 ---
 
 ### 6.2 Dual File Storage Strategy
 
-> **Problem:** The system must work both in development (no Vercel Blob token) and production (with Vercel Blob), requiring transparent fallback.
+The system must work both in development (no Vercel Blob token) and production (with Vercel Blob), requiring transparent fallback.
 
 **Solution:** Abstracted storage behind a single `filePath` field. On download, the system checks whether the path is a blob URL (starts with `https://`) or a local path, then either redirects to the blob URL or streams the file from the local filesystem. Upload logic checks for `BLOB_READ_WRITE_TOKEN` at runtime.
 
@@ -463,7 +387,7 @@ flowchart TD
 
 ### 6.3 Role-Based Access Control Across Multiple Layers
 
-> **Problem:** Permissions must be enforced at middleware (route access), Server Components (data visibility), API routes (mutation authorization), and UI (button visibility).
+Permissions must be enforced at middleware (route access), Server Components (data visibility), API routes (mutation authorization), and UI (button visibility).
 
 **Solution:** Four-layer approach:
 
@@ -476,7 +400,7 @@ flowchart TD
 
 ### 6.4 Thai Language Support
 
-> **Problem:** Thai characters require specific font loading, and MongoDB's default text search does not natively support Thai word segmentation.
+Thai characters require specific font loading, and MongoDB's default text search does not natively support Thai word segmentation.
 
 **Solution:** Loaded `Noto_Sans_Thai` via `next/font` with `display: "swap"` and CSS variables. For search, used regex-based matching on title/description fields rather than MongoDB text indexes, since the dataset size is manageable. This avoids Thai word segmentation complexity.
 
@@ -484,7 +408,7 @@ flowchart TD
 
 ### 6.5 File Upload Size Limits
 
-> **Problem:** Large PDFs could exceed request body limits (default Next.js 4.5 MB) and cause poor UX during upload.
+Large PDFs could exceed request body limits (default Next.js 4.5 MB) and cause poor UX during upload.
 
 **Solution:** Implemented chunked upload monitoring via `XMLHttpRequest` with `upload.onprogress` event, displaying a real-time progress bar. Added configurable `maxFileSizeMB` setting (default 50 MB) checked both client-side (before upload) and server-side (during processing).
 
@@ -492,7 +416,7 @@ flowchart TD
 
 ### 6.6 Server / Client Component Boundary
 
-> **Problem:** Next.js App Router requires clear separation between Server and Client Components. Directly passing complex objects (like Prisma models with dates) across the boundary causes serialization errors.
+Next.js App Router requires clear separation between Server and Client Components. Directly passing complex objects (like Prisma models with dates) across the boundary causes serialization errors.
 
 **Solution:** All Prisma queries remain in Server Components. Data is passed as plain props (serializable objects). Client components are leaf nodes that handle interactivity (forms, modals, toggles). Server Actions handle mutations and call `revalidatePath()` to keep the UI fresh.
 
@@ -500,7 +424,7 @@ flowchart TD
 
 ### 6.7 State Persistence Across Sessions
 
-> **Problem:** User preferences (table vs. card view) should persist across sessions without a database round-trip.
+User preferences (table vs. card view) should persist across sessions without a database round-trip.
 
 **Solution:** Built a `usePersistedState` hook that syncs state to `localStorage`. The view toggle in the PDF list page uses this hook, so user preference is remembered locally without server involvement.
 
@@ -508,22 +432,22 @@ flowchart TD
 
 ### 6.8 Responsive Layout with Sidebar Navigation
 
-> **Problem:** The app shell must work on both desktop (expanded sidebar) and mobile (collapsed/hidden sidebar) while maintaining accessible navigation.
+The app shell must work on both desktop (expanded sidebar) and mobile (collapsed/hidden sidebar) while maintaining accessible navigation.
 
 **Solution:** Used shadcn/ui's `Sidebar` component with `@base-ui/react` primitives. Desktop shows a collapsible sidebar with tree navigation. Mobile uses a sheet (slide-over) pattern. The responsive behavior is managed via the `use-mobile` hook that detects viewport width.
 
 ---
 
-## 🗺️ Future Roadmap
+## Future Roadmap
 
-### Short-Term *(Next 3 Months)*
+### Short-Term (Next 3 Months)
 
 - **Full-Text Search** — Integrate MongoDB Atlas Search indexes for Thai-aware full-text search with better ranking and typo tolerance
 - **Pagination** — Replace infinite-scroll with cursor-based pagination for large PDF collections (10,000+ records)
 - **Bulk Upload** — Allow uploading multiple PDFs at once with batch metadata assignment
 - **PDF Thumbnails** — Generate preview thumbnails on upload using a server-side PDF renderer
 
-### Medium-Term *(3-6 Months)*
+### Medium-Term (3-6 Months)
 
 - **OAuth Providers** — Add Google/Microsoft login alongside credentials for university staff
 - **Activity Log** — Track all user actions (upload, delete, edit) with timestamps and actor info
@@ -531,7 +455,7 @@ flowchart TD
 - **CDN Caching** — Cache popular PDFs at the edge via CDN (Vercel Edge or Cloudflare)
 - **API Rate Limiting** — Protect public API routes from abuse
 
-### Long-Term *(6-12 Months)*
+### Long-Term (6-12 Months)
 
 - **Elasticsearch Integration** — Replace MongoDB search with dedicated Elasticsearch for advanced full-text search, faceted filtering, and Thai language analyzer support
 - **Microservices Split** — Separate file upload service from the main Next.js app for independent scaling

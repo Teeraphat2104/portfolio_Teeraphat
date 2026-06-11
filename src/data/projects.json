@@ -1,0 +1,82 @@
+[
+  {
+    "id": "barbershop",
+    "title": "Barbershop Booking & Queue Management System",
+    "role": "Lead Developer & Architect",
+    "description": "A comprehensive scheduling and real-time barber queue management system featuring point-of-sale integration and a full-coverage Pest API test suite.",
+    "technologies": ["SQL", "REST APIs", "PostgreSQL", "GitHub Actions"],
+    "metrics": [
+      { "label": "QUEUE DISPATCH TIME", "value": "< 15ms" },
+      { "label": "TEST SUITE COVERAGE", "value": "100% (Pest)" },
+      { "label": "POS TX LATENCY", "value": "< 120ms" }
+    ],
+    "challenges": [
+      {
+        "problem": "Preventing double-booking and concurrency conflicts during high-frequency appointment spikes.",
+        "solution": "Implemented strict pessimistic database locks on active booking transactions combined with multi-layered Eloquent validation rules."
+      },
+      {
+        "problem": "Ensuring real-time synchronization of queue counters for customer and barber dashboards.",
+        "solution": "Built an active polling and transactional event dispatch dispatcher that syncs frontend client slots with local database states instantaneously."
+      }
+    ],
+    "github": "https://github.com/example/Barbershop-Booking-Queue-Management-System",
+    "demo": "/projects/barbershop/demo"
+  },
+  {
+    "id": "cpru-graduated-system",
+    "title": "Graduated System CPRU",
+    "role": "Full-Stack Developer & Architect",
+    "description": "Digital transformation of alumni registration and management for CPRU Rajabhat University, transitioning paper-based workflows into a secure, scalable digital platform.",
+    "technologies": ["PHP", "Laravel", "MySQL", "Bootstrap", "Vite", "Docker"],
+    "metrics": [
+      { "label": "PAYMENT VERIFICATION", "value": "State Machine" },
+      { "label": "DATA EXPORT", "value": "Async Queue" },
+      { "label": "ASSET DELIVERY", "value": "Signed URLs" }
+    ],
+    "challenges": [
+      {
+        "problem": "Transitioning from paper-based alumni registration to a fully digital, auditable workflow with state integrity guarantees.",
+        "solution": "Implemented a formal State Machine with atomic locks for payment verification, recording every state change in audit logs with actor, timestamp, and reason."
+      },
+      {
+        "problem": "Handling high-volume alumni data exports without server timeouts or memory exhaustion.",
+        "solution": "Designed an async queue-based export system using Maatwebsite/Excel with chunk reading, delivering exports via temporary signed URLs."
+      }
+    ],
+    "github": "https://github.com/example/cpru-graduated-system"
+  },
+  {
+    "id": "university",
+    "title": "University Database System",
+    "role": "Full-Stack Developer & Architect",
+    "description": "A full-featured PDF management and archiving platform for university academic documents, featuring role-based access control, dual file storage strategy, and Thai language support — built with Next.js 16, MongoDB, and Prisma.",
+    "technologies": ["Next.js 16", "TypeScript", "MongoDB", "Prisma", "Docker", "NextAuth v5", "Tailwind CSS"],
+    "metrics": [
+      { "label": "STORAGE STRATEGY", "value": "Dual (Vercel Blob / Local)" },
+      { "label": "AUTH TIERS", "value": "3-Tier RBAC" },
+      { "label": "FILE LIMIT", "value": "50 MB Configurable" },
+      { "label": "SEARCH", "value": "Regex Multi-Field" }
+    ],
+    "challenges": [
+      {
+        "problem": "MongoDB lacks native JOINs, making relational queries with Prisma's MongoDB provider limited compared to SQL providers.",
+        "solution": "Used embedded ObjectId references with Prisma's `include` for eager-loading related documents across User to Pdf and Category to Pdf relationships."
+      },
+      {
+        "problem": "The system must work both in development (no cloud blob token) and production (Vercel Blob), requiring a transparent fallback strategy.",
+        "solution": "Abstracted storage behind a single `filePath` field; download logic checks if path is a blob URL or local path, then redirects or streams accordingly."
+      },
+      {
+        "problem": "Permissions must be enforced at middleware, Server Components, API routes, and client UI — four separate layers with consistent rules.",
+        "solution": "Four-layer enforcement — proxy middleware blocks routes, Server Actions check auth() before mutations, API routes verify roles, client components conditionally render UI from session props."
+      },
+      {
+        "problem": "Thai characters require specific font loading, and MongoDB text search doesn't support Thai word segmentation natively.",
+        "solution": "Loaded Noto Sans Thai via next/font, used regex-based matching on title/description instead of MongoDB text indexes to avoid Thai segmentation complexity."
+      }
+    ],
+    "github": "https://github.com/example/university-database-system",
+    "demo": "https://university-database-system.vercel.app/"
+  }
+]

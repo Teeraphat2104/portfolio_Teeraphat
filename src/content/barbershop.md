@@ -1,24 +1,3 @@
----
-title: Barbershop Booking & Queue Management System
-role: Lead Developer & Architect
-description: A comprehensive scheduling and real-time barber queue management system featuring point-of-sale integration and a full-coverage Pest API test suite.
-technologies: [SQL, REST APIs, PostgreSQL, GitHub Actions]
-metrics:
-  - label: QUEUE DISPATCH TIME
-    value: < 15ms
-  - label: TEST SUITE COVERAGE
-    value: 100% (Pest)
-  - label: POS TX LATENCY
-    value: < 120ms
-challenges:
-  - problem: Preventing double-booking and concurrency conflicts during high-frequency appointment spikes.
-    solution: Implemented strict pessimistic database locks on active booking transactions combined with multi-layered Eloquent validation rules.
-  - problem: Ensuring real-time synchronization of queue counters for customer and barber dashboards.
-    solution: Built an active polling and transactional event dispatch dispatcher that syncs frontend client slots with local database states instantaneously.
-github: https://github.com/example/Barbershop-Booking-Queue-Management-System
-demo: /projects/barbershop/demo
----
-
 ## System Architecture
 
 ```mermaid
