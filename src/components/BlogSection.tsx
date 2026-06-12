@@ -10,14 +10,14 @@ export const BlogSection: React.FC = () => {
   return (
     <div id="blog">
       <Container>
-        <div className="mb-12 space-y-2">
+        <div className="mb-6 space-y-2">
           <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">04.</div>
           <h2 className="text-3xl font-medium text-gray-900 md:text-4xl">Selected Projects</h2>
           <p className="lg:w-6/12 text-gray-600">
             A selection of non-trivial architectural solutions addressing consistency, distribution, and real-time operations.
           </p>
         </div>
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((project) => (
             <div
               key={project.id}
@@ -55,7 +55,7 @@ export const BlogSection: React.FC = () => {
           ))}
         </div>
         {featured.length > 0 && (
-          <div className="mt-12 text-center">
+          <div className="mt-6 text-center">
             <button
               onClick={() => navigate('/projects')}
               className="flex h-11 w-full items-center justify-center px-6 border border-gray-300 text-gray-700 text-sm font-medium transition hover:border-gray-900 hover:text-gray-900 mx-auto sm:w-max"

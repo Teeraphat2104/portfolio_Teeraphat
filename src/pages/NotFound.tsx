@@ -3,7 +3,7 @@ import { Container } from '../components/Container'
 
 export const NotFound: React.FC = () => {
   return (
-    <div className="pt-32 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-20 animate-[fadeIn_0.8s_ease-out]">
       <Container>
         <div className="text-center">
           <span className="text-[8rem] font-medium text-gray-200 leading-none block mb-4">404</span>

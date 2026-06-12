@@ -54,15 +54,15 @@ export const About: React.FC = () => {
   ];
 
   return (
-    <div className="pt-24 pb-16 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
       <Container>
-        <div className="md:w-2/3 lg:w-1/2 mb-16">
+        <div className="md:w-2/3 lg:w-1/2 mb-8">
           <h1 className="text-3xl md:text-4xl font-medium text-gray-900">
             About Me
           </h1>
         </div>
 
-        <div className="max-w-3xl space-y-4 mb-16">
+        <div className="max-w-3xl space-y-4 mb-8">
           <p className="text-lg leading-relaxed text-gray-900">
             I am a Full-Stack Software Engineer specializing in backend
             architecture, distributed systems, and high-performance web
@@ -78,8 +78,8 @@ export const About: React.FC = () => {
         </div>
 
         <section className="mb-16">
-          <h2 className="text-2xl font-medium text-gray-900 mb-8">
-            Experience
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">
+          Experience
           </h2>
           <div className="space-y-8">
             {experience.map((exp) => (
@@ -106,8 +106,8 @@ export const About: React.FC = () => {
         </section>
 
         <section className="mb-16">
-          <h2 className="text-2xl font-medium text-gray-900 mb-8">
-            Skills & Technologies
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">
+          Skills & Technologies
           </h2>
           <div className="space-y-6">
             {Object.entries(skills).map(([category, skillList]) => (
@@ -131,8 +131,8 @@ export const About: React.FC = () => {
         </section>
 
         <section className="mb-16">
-          <h2 className="text-2xl font-medium text-gray-900 mb-8">
-            Education
+          <h2 className="text-2xl font-medium text-gray-900 mb-6">
+          Education
           </h2>
           <div className="space-y-8">
             {education.map((edu) => (

@@ -53,7 +53,7 @@ export const FeaturesSection: React.FC = () => {
             A full-stack engineering toolkit spanning frontend, backend, infrastructure, and AI-assisted development.
           </p>
         </div>
-        <div className="mt-16 grid divide-x divide-y divide-gray-200 border border-gray-200 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0">
+         <div className="mt-8 grid divide-x divide-y divide-gray-200 border border-gray-200 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0">
           {skillCategories.map((cat, i) => (
             <div
               key={cat.title}
@@ -61,7 +61,7 @@ export const FeaturesSection: React.FC = () => {
                 i === skillCategories.length - 1 ? 'bg-gray-50 group-hover:bg-white' : ''
               }`}
             >
-              <div className="relative space-y-8 py-12 p-8">
+              <div className="relative space-y-6 py-8 p-6">
                 {cat.icon}
                 <div className="space-y-2">
                   <h5 className="text-lg font-medium text-gray-900 transition group-hover:text-black">

@@ -38,11 +38,11 @@ export const Contact: React.FC = () => {
   ]
 
   return (
-    <div className="pt-24 pb-16 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
       <Container>
-        <div className="md:w-2/3 lg:w-1/2 mb-12">
-          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-4">
-            Get in Touch
+        <div className="md:w-2/3 lg:w-1/2 mb-6">
+          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 mb-6">
+          Get in Touch
           </h1>
           <p className="text-gray-600 leading-relaxed">
             I am always open to discussing new projects, interesting opportunities,

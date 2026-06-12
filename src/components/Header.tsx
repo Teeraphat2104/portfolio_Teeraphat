@@ -47,8 +47,8 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
           : 'bg-transparent border-b border-transparent'
       } ${menuOpen ? 'bg-white' : ''}`}
     >
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 md:gap-0 md:py-4">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="relative flex flex-wrap items-center justify-between gap-6 py-2 md:gap-0 md:py-3">
           <div className="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
             <Link to="/" onClick={closeMenu} aria-label="logo" className="flex items-center space-x-2">
               <div aria-hidden="true" className="flex space-x-1">
@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
                   </div>
                 </div>
 
-                <div className="mt-12 lg:mt-0">
+                <div className="mt-6 lg:mt-0">
                   <button
                     onClick={() => { closeMenu(); navigate('/contact') }}
                     className="flex h-9 items-center justify-center px-4 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900 sm:w-max"

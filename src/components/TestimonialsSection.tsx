@@ -22,13 +22,13 @@ export const TestimonialsSection: React.FC = () => {
   return (
     <div id="reviews">
       <Container>
-        <div className="mb-16 space-y-4 px-6 md:px-0">
+        <div className="mb-8 space-y-4 px-6 md:px-0">
           <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">03.</div>
           <h2 className="text-2xl font-medium text-gray-900 md:text-4xl text-left">
             Featured Projects
           </h2>
         </div>
-        <div className="md:columns-2 lg:columns-3 gap-8 space-y-8">
+        <div className="md:columns-2 lg:columns-3 gap-5 space-y-5">
           {highlights.map((item) => (
             <div
               key={item.title}

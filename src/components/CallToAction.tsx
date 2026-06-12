@@ -5,7 +5,7 @@ export const CallToAction: React.FC = () => {
   const navigate = useNavigate()
 
   return (
-    <div className="relative py-16">
+    <div className="relative py-10">
       <Container>
         <div className="relative">
           <div className="mt-6 space-y-6 md:w-8/12 lg:w-7/12">

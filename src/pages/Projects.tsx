@@ -6,9 +6,9 @@ export const ProjectsPage: React.FC = () => {
  const projects = getAllProjectMetas()
 
  return (
- <div className="pt-24 pb-16 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
  <Container>
- <div className="md:w-2/3 lg:w-1/2 mb-16">
+    <div className="md:w-2/3 lg:w-1/2 mb-8">
   <h1 className="text-3xl md:text-4xl font-bold text-moss">
   All Projects
   </h1>
@@ -22,7 +22,7 @@ export const ProjectsPage: React.FC = () => {
  ))}
  </div>
  {projects.length === 0 && (
- <div className="text-center py-20">
+    <div className="text-center py-12">
   <p className="text-sage text-sm">No projects yet.</p>
  </div>
  )}

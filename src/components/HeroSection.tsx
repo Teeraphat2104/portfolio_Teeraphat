@@ -48,7 +48,7 @@ export const HeroSection: React.FC = () => {
   return (
     <div className="relative" id="home">
       <Container>
-        <div className="relative pt-36 ml-auto">
+         <div className="relative pt-24 ml-auto">
           <div className="lg:w-2/3">
             <div className="text-xs text-gray-400 tracking-[0.2em] mb-4">2026.06.12 — PORTFOLIO</div>
 
@@ -70,7 +70,7 @@ export const HeroSection: React.FC = () => {
               aesthetics.
             </p>
 
-            <div className="mt-16 flex flex-wrap gap-y-4 gap-x-6">
+            <div className="mt-8 flex flex-wrap gap-y-4 gap-x-6">
               <button
                 onClick={() => navigate('/projects')}
                 className="flex h-11 w-full items-center justify-center px-6 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900 sm:w-max"
@@ -85,7 +85,7 @@ export const HeroSection: React.FC = () => {
               </button>
             </div>
 
-            <div className="hidden py-8 mt-16 border-t border-b border-gray-200 sm:flex justify-between">
+            <div className="hidden py-6 mt-8 border-t border-b border-gray-200 sm:flex justify-between">
               <div className="text-left">
                 <h6 className="text-sm font-medium text-gray-900">Engineering Principles</h6>
                 <p className="mt-2 text-gray-500 text-sm">Scalability / High Concurrency</p>

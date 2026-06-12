@@ -6,7 +6,7 @@ export const StatsSection: React.FC = () => {
       <Container>
         <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">02.</div>
 
-        <div className="space-y-6 justify-between md:flex flex-row-reverse md:gap-6 md:space-y-0 lg:gap-12 lg:items-center">
+            <div className="space-y-6 justify-between md:flex flex-row-reverse md:gap-6 md:space-y-0 lg:gap-8 lg:items-center">
           <div className="md:5/12 lg:w-1/2">
             <div className="w-full bg-gray-50 border border-gray-200 p-8 flex items-center justify-center">
               <svg viewBox="0 0 200 160" className="w-full max-w-[280px]" xmlns="http://www.w3.org/2000/svg">

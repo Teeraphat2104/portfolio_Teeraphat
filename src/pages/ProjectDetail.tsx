@@ -148,7 +148,7 @@ export const ProjectDetail: React.FC = () => {
 
   if (!project) {
     return (
-      <div className="pt-24 text-center">
+      <div className="pt-16 text-center">
         <Container>
           <h1 className="text-2xl font-medium text-gray-900 mb-4">Project not found</h1>
           <Link to="/projects" className="text-gray-700 hover:underline">
@@ -168,7 +168,7 @@ export const ProjectDetail: React.FC = () => {
   : ''
 
   return (
-    <div className="pt-24 pb-16 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
       <Container>
         <button
           onClick={() => navigate('/projects')}
