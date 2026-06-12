@@ -1,3 +1,4 @@
+import { getTechIcon } from '../lib/techIcons'
 import { Container } from '../components/Container'
 
 export const About: React.FC = () => {
@@ -97,9 +98,15 @@ export const About: React.FC = () => {
                 <span className="text-base text-gray-500 block">
                   {exp.company}
                 </span>
-                <p className="text-base text-gray-500 mt-2 leading-relaxed">
-                  {exp.description}
-                </p>
+                <div className="text-base text-gray-500 mt-2 leading-relaxed">
+                  {Array.isArray(exp.description) ? (
+                    <ul className="space-y-1 list-disc list-inside">
+                      {exp.description.map((d, idx) => <li key={idx}>{d}</li>)}
+                    </ul>
+                  ) : (
+                    <p>{exp.description}</p>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -116,14 +123,18 @@ export const About: React.FC = () => {
                   {category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {skillList.map((skill) => (
-                    <span
-                      key={skill}
-                      className="text-sm px-3 py-1.5 border border-gray-200 bg-white text-gray-600 hover:border-gray-400 transition-colors"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                  {skillList.map((skill) => {
+                    const Icon = getTechIcon(skill)
+                    return (
+                      <span
+                        key={skill}
+                        className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 border border-gray-200 bg-white text-gray-600 hover:border-gray-400 transition-colors"
+                      >
+                        {Icon && <Icon className="w-3.5 h-3.5" />}
+                        {skill}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
             ))}

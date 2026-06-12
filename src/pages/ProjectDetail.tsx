@@ -2,6 +2,7 @@ import { BiArrowBack, BiPlayCircle } from 'react-icons/bi'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import { getProjectById } from '../lib/projects'
+import { getTechIcon } from '../lib/techIcons'
 import { MermaidRenderer } from '../components/MermaidRenderer'
 import { Container } from '../components/Container'
 import type { Section } from '../types'
@@ -265,14 +266,18 @@ export const ProjectDetail: React.FC = () => {
         <p className="text-base text-gray-600 max-w-3xl mb-6 leading-relaxed">{project.description}</p>
 
         <div className="flex flex-wrap gap-2 mb-6">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="text-sm px-2.5 py-1 border border-gray-200 bg-white text-gray-600 hover:border-gray-400 hover:text-gray-900 transition-all"
-            >
-              {tech}
-            </span>
-          ))}
+          {project.technologies.map((tech) => {
+            const Icon = getTechIcon(tech)
+            return (
+              <span
+                key={tech}
+                className="inline-flex items-center gap-1.5 text-sm px-2.5 py-1 border border-gray-200 bg-white text-gray-600 hover:border-gray-400 hover:text-gray-900 transition-all"
+              >
+                {Icon && <Icon className="w-3.5 h-3.5" />}
+                {tech}
+              </span>
+            )
+          })}
         </div>
 
         {project.demo && (
