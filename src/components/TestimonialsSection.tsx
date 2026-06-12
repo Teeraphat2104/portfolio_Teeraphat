@@ -1,3 +1,4 @@
+import { BiStar } from 'react-icons/bi'
 import { Container } from './Container'
 
 const highlights = [
@@ -36,9 +37,7 @@ export const TestimonialsSection: React.FC = () => {
             >
               <div className="flex gap-4">
                 <div className="w-12 h-12 bg-gray-100 flex items-center justify-center flex-shrink-0">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-gray-700">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                  </svg>
+                  <BiStar className="w-5 h-5 text-gray-700" />
                 </div>
                 <div>
                   <h6 className="text-base font-medium text-gray-900">{item.title}</h6>

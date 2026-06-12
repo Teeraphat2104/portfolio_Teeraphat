@@ -1,3 +1,4 @@
+import { BiArrowBack, BiPlayCircle } from 'react-icons/bi'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -174,10 +175,7 @@ export const ProjectDetail: React.FC = () => {
           onClick={() => navigate('/projects')}
           className="group text-sm text-gray-400 hover:text-black transition-colors inline-flex items-center gap-2 mb-6"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-0.5 transition-transform">
-            <line x1="19" y1="12" x2="5" y2="12" />
-            <polyline points="12 19 5 12 12 5" />
-          </svg>
+          <BiArrowBack className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
           BACK TO PROJECTS
         </button>
 
@@ -206,9 +204,7 @@ export const ProjectDetail: React.FC = () => {
             className="inline-flex h-11 items-center justify-center px-6 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900 mb-10"
           >
             <span className="relative flex items-center gap-2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="5 3 19 12 5 21 5 3" />
-              </svg>
+              <BiPlayCircle className="w-4 h-4" />
               Live Demo
             </span>
           </a>
