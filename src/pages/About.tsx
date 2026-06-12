@@ -65,6 +65,9 @@ export const About: React.FC = () => {
 
         <div className="max-w-3xl space-y-4 mb-8">
           <p className="text-lg leading-relaxed text-gray-900">
+            Hello! My name is Teeraphat Lansantad (Tor).
+          </p>
+          <p className="text-lg leading-relaxed text-gray-600">
             I am a Full-Stack Software Engineer specializing in backend
             architecture, distributed systems, and high-performance web
             applications. My work spans from designing database schemas for
