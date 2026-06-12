@@ -2,6 +2,7 @@ import { BiRightArrowAlt } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { Container } from './Container'
 import { getAllProjectMetas } from '../lib/projects'
+import { getTechIcon } from '../lib/techIcons'
 
 export const BlogSection: React.FC = () => {
   const navigate = useNavigate()
@@ -36,14 +37,18 @@ export const BlogSection: React.FC = () => {
                   {project.description}
                 </p>
                 <div className="flex flex-wrap gap-1.5 mb-6">
-                  {project.technologies.slice(0, 4).map((tech) => (
-                    <span
-                      key={tech}
-                      className="text-xs px-2 py-1 bg-gray-50 border border-gray-200 text-gray-500"
-                    >
-                      {tech}
-                    </span>
-                  ))}
+                  {project.technologies.slice(0, 4).map((tech) => {
+                    const Icon = getTechIcon(tech)
+                    return (
+                      <span
+                        key={tech}
+                        className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-gray-50 border border-gray-200 text-gray-500"
+                      >
+                        {Icon && <Icon className="w-3 h-3" />}
+                        {tech}
+                      </span>
+                    )
+                  })}
                 </div>
                 <span className="inline-flex items-center gap-1 text-gray-700 text-sm font-medium">
                   View project
