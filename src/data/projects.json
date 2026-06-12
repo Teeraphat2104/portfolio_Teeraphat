@@ -510,7 +510,6 @@
       }
     ],
     "github": "https://github.com/example/university-database-system",
-    "demo": "https://university-database-system.vercel.app/",
     "sections": [
       {
         "type": "heading",
