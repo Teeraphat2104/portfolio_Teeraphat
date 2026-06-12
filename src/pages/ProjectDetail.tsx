@@ -154,6 +154,54 @@ function SectionRenderer({ sections }: { sections: Section[] }) {
                 </table>
               </div>
             )
+          case 'fieldGrid':
+            return (
+              <div key={i} className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                {section.fields.map((f, j) => (
+                  <div key={j} className="border border-gray-200 p-3 bg-white">
+                    <div className="text-sm font-medium text-gray-900 mb-1">{f.field}</div>
+                    <div className="text-xs text-gray-500 space-y-0.5">
+                      <span>{f.type}</span>
+                      <span className="mx-0.5">·</span>
+                      <span className={f.nullable === 'No' ? '' : ''}>{f.nullable}</span>
+                      {f.default && <><span className="mx-0.5">·</span><span>{f.default || '-'}</span></>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
+          case 'tableGroup':
+            return (
+              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+                {section.tables.map((table, j) => (
+                  <div key={j} className="border border-gray-200 bg-white">
+                    <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+                      <span className="text-sm font-medium text-gray-900">{table.name}</span>
+                      <span className="text-xs text-gray-400 tabular-nums">{table.cols} cols</span>
+                    </div>
+                    {table.fields.length > 0 && (
+                      <div className="divide-y divide-gray-100">
+                        {table.fields.map((f, k) => (
+                          <div key={k} className="px-4 py-2 text-xs text-gray-600 flex items-baseline gap-2">
+                            <span className="font-mono text-gray-900">{f.field}</span>
+                            <span className="text-gray-400">{f.type}</span>
+                            <span className={f.nullable === 'No' ? 'text-gray-900' : 'text-gray-400'}>
+                              {f.nullable === 'No' ? '· NOT NULL' : '· nullable'}
+                            </span>
+                            {f.default && f.default !== '' && f.default !== 'NULL' && (
+                              <span className="text-gray-400">· default {f.default}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="px-4 py-2.5 border-t border-gray-200">
+                      <span className="text-xs text-gray-500 leading-relaxed">{table.description}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )
           case 'blockquote':
             return (
               <blockquote
@@ -198,10 +246,6 @@ export const ProjectDetail: React.FC = () => {
   const overviewSections = challengeSectionIdx >= 0
     ? project.sections.slice(0, challengeSectionIdx)
     : project.sections
-
-  const challengeSections = challengeSectionIdx >= 0
-    ? project.sections.slice(challengeSectionIdx)
-    : null
 
   return (
     <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
@@ -282,8 +326,6 @@ export const ProjectDetail: React.FC = () => {
         <div className="prose-custom">
           {activeTab === 'overview' ? (
             <SectionRenderer sections={overviewSections} />
-          ) : challengeSections ? (
-            <SectionRenderer sections={challengeSections} />
           ) : (
             <div className="space-y-6">
               {project.challenges.map((c, i) => (
@@ -293,10 +335,10 @@ export const ProjectDetail: React.FC = () => {
                       {i + 1}
                     </span>
                     <div className="flex-1">
-                      <span className="text-xs text-gray-400 tracking-wider block mb-1.5">PROBLEM</span>
+                      <span className="text-xs tracking-wider block mb-1.5 text-red-600">PROBLEM</span>
                       <p className="text-base text-gray-900 leading-relaxed">{c.problem}</p>
                       <div className="w-8 h-px bg-gray-200 my-5" />
-                      <span className="text-xs text-gray-400 tracking-wider block mb-1.5">SOLUTION</span>
+                      <span className="text-xs tracking-wider block mb-1.5 text-green-600">SOLUTION</span>
                       <p className="text-base text-gray-600 leading-relaxed">{c.solution}</p>
                     </div>
                   </div>

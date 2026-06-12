@@ -306,13 +306,176 @@
       {
         "type": "heading",
         "level": 3,
-        "text": "7. Database Schema (24 Tables)"
+        "text": "7. Database Schema — 24 Tables"
       },
       {
-        "type": "code",
-        "lang": "sql",
-        "code": "CREATE TABLE activity (\n  id            BIGINT NOT NULL AUTO_INCREMENT,\n  place_name    VARCHAR(255) NOT NULL,\n  activity_name VARCHAR(100) NOT NULL,\n  date          DATE NOT NULL,\n  time_range    VARCHAR(255) NOT NULL,\n  details       VARCHAR(255) DEFAULT NULL,\n  registered    INT NOT NULL DEFAULT 0,\n  is_active     INT NOT NULL,\n  pdf_file      VARCHAR(255) DEFAULT NULL,\n  place_image   VARCHAR(255) DEFAULT NULL,\n  created_at    TIMESTAMP DEFAULT NULL,\n  updated_at    TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE banners (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  sort_order INT NOT NULL DEFAULT 0,\n  image_path VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE blogs (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  user_id    BIGINT NOT NULL,\n  title      VARCHAR(255) NOT NULL,\n  body       TEXT NOT NULL,\n  status     ENUM('pending','approved') NOT NULL DEFAULT 'pending',\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE blog_likes (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  blog_id    BIGINT NOT NULL,\n  user_id    BIGINT NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE cache (\n  key        VARCHAR(255) NOT NULL,\n  value      MEDIUMTEXT NOT NULL,\n  expiration INT NOT NULL,\n  PRIMARY KEY (key)\n);\n\nCREATE TABLE cache_locks (\n  key        VARCHAR(255) NOT NULL,\n  owner      VARCHAR(255) NOT NULL,\n  expiration INT NOT NULL,\n  PRIMARY KEY (key)\n);\n\nCREATE TABLE cardex (\n  id           BIGINT NOT NULL AUTO_INCREMENT,\n  student_id   VARCHAR(255) NOT NULL,\n  student_name VARCHAR(255) NOT NULL,\n  created_at   TIMESTAMP DEFAULT NULL,\n  updated_at   TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE comments (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  blog_id    BIGINT NOT NULL,\n  user_id    BIGINT NOT NULL,\n  body       TEXT NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE daily_logins (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  user_id    BIGINT NOT NULL,\n  date       DATE NOT NULL,\n  count      INT NOT NULL DEFAULT 0,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE dormitories (\n  id              BIGINT NOT NULL AUTO_INCREMENT,\n  name            VARCHAR(255) NOT NULL,\n  house_number    VARCHAR(255) DEFAULT NULL,\n  village         VARCHAR(255) DEFAULT NULL,\n  village_number  VARCHAR(255) DEFAULT NULL,\n  sub_district    VARCHAR(255) DEFAULT NULL,\n  district        VARCHAR(255) DEFAULT NULL,\n  province        VARCHAR(255) DEFAULT NULL,\n  zipcode         VARCHAR(255) DEFAULT NULL,\n  phone           VARCHAR(255) DEFAULT NULL,\n  description     TEXT DEFAULT NULL,\n  price_daily     VARCHAR(255) DEFAULT NULL,\n  price           VARCHAR(255) DEFAULT NULL,\n  price_type      VARCHAR(255) DEFAULT NULL,\n  dorm_image      VARCHAR(255) DEFAULT NULL,\n  dorm_more_img   LONGTEXT DEFAULT NULL,\n  created_at      TIMESTAMP DEFAULT NULL,\n  updated_at      TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE dorm_images (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  dorm_id    BIGINT NOT NULL,\n  image_path VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE forms (\n  id           BIGINT NOT NULL AUTO_INCREMENT,\n  title        VARCHAR(255) NOT NULL,\n  description  TEXT DEFAULT NULL,\n  status_form  VARCHAR(10) NOT NULL DEFAULT 'closed',\n  header_image VARCHAR(255) DEFAULT NULL,\n  slug         VARCHAR(255) NOT NULL,\n  fields       LONGTEXT DEFAULT NULL,\n  created_at   TIMESTAMP DEFAULT NULL,\n  updated_at   TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE form_responses (\n  id                 BIGINT NOT NULL AUTO_INCREMENT,\n  form_id            BIGINT NOT NULL,\n  user_id            VARCHAR(10) NOT NULL,\n  student_id         VARCHAR(10) DEFAULT NULL,\n  full_name          VARCHAR(180) DEFAULT NULL,\n  email              VARCHAR(255) DEFAULT NULL,\n  payment_status     VARCHAR(20) DEFAULT 'pending',\n  payment_updated_at VARCHAR(20) DEFAULT NULL,\n  payment_note       VARCHAR(255) DEFAULT NULL,\n  data               LONGTEXT NOT NULL,\n  slips              LONGTEXT DEFAULT NULL,\n  other_files        LONGTEXT DEFAULT NULL,\n  created_at         TIMESTAMP DEFAULT NULL,\n  updated_at         TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE import_data (\n  id              BIGINT NOT NULL AUTO_INCREMENT,\n  thai_id         VARCHAR(13) DEFAULT NULL,\n  student_id      VARCHAR(9) NOT NULL,\n  title           VARCHAR(10) NOT NULL,\n  name            VARCHAR(50) NOT NULL,\n  lastname        VARCHAR(50) NOT NULL,\n  course          VARCHAR(50) DEFAULT NULL,\n  faculty         VARCHAR(50) NOT NULL,\n  major           VARCHAR(50) DEFAULT NULL,\n  degree_level    VARCHAR(50) NOT NULL,\n  generation      VARCHAR(10) DEFAULT NULL,\n  graduation_year VARCHAR(10) DEFAULT NULL,\n  phone           VARCHAR(60) DEFAULT NULL,\n  job_position    VARCHAR(80) DEFAULT NULL,\n  current_job     VARCHAR(80) DEFAULT NULL,\n  profile_image   VARCHAR(255) DEFAULT NULL,\n  other_files     VARCHAR(255) DEFAULT NULL,\n  created_at      TIMESTAMP DEFAULT NULL,\n  updated_at      TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE migrations (\n  id        INT NOT NULL AUTO_INCREMENT,\n  migration VARCHAR(255) NOT NULL,\n  batch     INT NOT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE news_files (\n  news_id    VARCHAR(255) DEFAULT NULL,\n  file_name  VARCHAR(255) DEFAULT NULL,\n  file_type  VARCHAR(255) DEFAULT NULL,\n  file_path  VARCHAR(255) DEFAULT NULL,\n  created_at TIMESTAMP(6) DEFAULT NULL,\n  updated_at TIMESTAMP(6) DEFAULT NULL\n);\n\nCREATE TABLE news_posts (\n  id           BIGINT NOT NULL AUTO_INCREMENT,\n  title        VARCHAR(255) NOT NULL,\n  content      TEXT NOT NULL,\n  category     VARCHAR(255) DEFAULT NULL,\n  image        VARCHAR(255) DEFAULT NULL,\n  files        LONGTEXT DEFAULT NULL,\n  publish_date DATE DEFAULT NULL,\n  user_id      BIGINT NOT NULL,\n  file_path    VARCHAR(255) DEFAULT NULL,\n  file_name    VARCHAR(2552) DEFAULT NULL,\n  file_type    VARCHAR(255) DEFAULT NULL,\n  views        INT DEFAULT 0,\n  created_at   TIMESTAMP DEFAULT NULL,\n  updated_at   TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE password_reset_tokens (\n  email      VARCHAR(255) NOT NULL,\n  token      VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (email)\n);\n\nCREATE TABLE payments (\n  id           BIGINT NOT NULL AUTO_INCREMENT,\n  user_id      BIGINT NOT NULL,\n  slip_image   VARCHAR(255) DEFAULT NULL,\n  status       ENUM('pending','processing','success','rejected','approved') NOT NULL DEFAULT 'pending',\n  approved_by  VARCHAR(255) DEFAULT NULL,\n  approved_at  VARCHAR(255) DEFAULT NULL,\n  rejected_by  VARCHAR(255) DEFAULT NULL,\n  rejected_at  VARCHAR(255) DEFAULT NULL,\n  created_at   TIMESTAMP DEFAULT NULL,\n  updated_at   TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE places (\n  id          BIGINT NOT NULL AUTO_INCREMENT,\n  place_name  VARCHAR(255) NOT NULL,\n  place_image VARCHAR(255) DEFAULT NULL,\n  created_at  TIMESTAMP DEFAULT NULL,\n  updated_at  TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE profiles (\n  id               BIGINT NOT NULL AUTO_INCREMENT,\n  user_id          BIGINT NOT NULL,\n  student_id       VARCHAR(9) DEFAULT NULL,\n  email            VARCHAR(255) NOT NULL,\n  phone            VARCHAR(10) DEFAULT NULL,\n  location         VARCHAR(255) DEFAULT NULL,\n  myprofile_image  VARCHAR(255) DEFAULT NULL,\n  facebook_url     VARCHAR(255) DEFAULT NULL,\n  twitter_url      VARCHAR(255) DEFAULT NULL,\n  instagram_url    VARCHAR(255) DEFAULT NULL,\n  bio              VARCHAR(255) DEFAULT NULL,\n  current_job      VARCHAR(255) DEFAULT NULL,\n  company          VARCHAR(255) DEFAULT NULL,\n  position         VARCHAR(255) DEFAULT NULL,\n  created_at       TIMESTAMP DEFAULT NULL,\n  updated_at       TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE satisfactions (\n  id         BIGINT NOT NULL AUTO_INCREMENT,\n  user_id    BIGINT DEFAULT NULL,\n  form_id    BIGINT DEFAULT NULL,\n  score      TINYINT NOT NULL,\n  created_at TIMESTAMP DEFAULT NULL,\n  updated_at TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE sessions (\n  id            VARCHAR(255) NOT NULL,\n  user_id       BIGINT DEFAULT NULL,\n  ip_address    VARCHAR(45) DEFAULT NULL,\n  user_agent    TEXT DEFAULT NULL,\n  payload       LONGTEXT NOT NULL,\n  last_activity INT NOT NULL,\n  PRIMARY KEY (id)\n);\n\nCREATE TABLE users (\n  id                BIGINT NOT NULL AUTO_INCREMENT,\n  student_id        VARCHAR(9) DEFAULT NULL,\n  username          VARCHAR(150) NOT NULL,\n  email             VARCHAR(255) DEFAULT NULL,\n  email_verified_at TIMESTAMP DEFAULT NULL,\n  password          VARCHAR(255) NOT NULL,\n  usertype          VARCHAR(5) NOT NULL DEFAULT 'user',\n  remember_token    VARCHAR(100) DEFAULT NULL,\n  created_at        TIMESTAMP DEFAULT NULL,\n  updated_at        TIMESTAMP DEFAULT NULL,\n  PRIMARY KEY (id)\n);"
-
+        "type": "tableGroup",
+        "tables": [
+          {
+            "name": "activity",
+            "cols": 12,
+            "description": "Place-based activity scheduling with PDF/file upload support",
+            "fields": []
+          },
+          {
+            "name": "banners",
+            "cols": 5,
+            "description": "Ordered homepage banner rotation",
+            "fields": []
+          },
+          {
+            "name": "blogs",
+            "cols": 7,
+            "description": "Blog posts with pending/approved status workflow",
+            "fields": []
+          },
+          {
+            "name": "blog_likes",
+            "cols": 4,
+            "description": "User likes on blog posts",
+            "fields": []
+          },
+          {
+            "name": "cache",
+            "cols": 3,
+            "description": "Laravel cache key-value store",
+            "fields": []
+          },
+          {
+            "name": "cache_locks",
+            "cols": 3,
+            "description": "Atomic cache lock entries",
+            "fields": []
+          },
+          {
+            "name": "cardex",
+            "cols": 4,
+            "description": "Student academic record cards",
+            "fields": []
+          },
+          {
+            "name": "comments",
+            "cols": 5,
+            "description": "Blog post comments",
+            "fields": []
+          },
+          {
+            "name": "daily_logins",
+            "cols": 5,
+            "description": "Per-user daily login count tracker",
+            "fields": []
+          },
+          {
+            "name": "dormitories",
+            "cols": 19,
+            "description": "Dormitory listings with pricing and images",
+            "fields": []
+          },
+          {
+            "name": "dorm_images",
+            "cols": 4,
+            "description": "Additional dormitory gallery images",
+            "fields": []
+          },
+          {
+            "name": "forms",
+            "cols": 10,
+            "description": "Dynamic EAV form definitions with slugs",
+            "fields": []
+          },
+          {
+            "name": "form_responses",
+            "cols": 14,
+            "description": "Form submissions with payment tracking and file uploads",
+            "fields": []
+          },
+          {
+            "name": "import_data",
+            "cols": 19,
+            "description": "Bulk alumni data import (Thai ID, academics, employment)",
+            "fields": [
+              { "field": "id", "type": "bigint", "nullable": "No", "default": "" },
+              { "field": "thai_id", "type": "varchar(13)", "nullable": "Yes", "default": "NULL" },
+              { "field": "student_id", "type": "varchar(9)", "nullable": "No", "default": "" },
+              { "field": "title", "type": "varchar(10)", "nullable": "No", "default": "" },
+              { "field": "name", "type": "varchar(50)", "nullable": "No", "default": "" },
+              { "field": "lastname", "type": "varchar(50)", "nullable": "No", "default": "" },
+              { "field": "course", "type": "varchar(50)", "nullable": "Yes", "default": "NULL" },
+              { "field": "faculty", "type": "varchar(50)", "nullable": "No", "default": "" },
+              { "field": "major", "type": "varchar(50)", "nullable": "Yes", "default": "NULL" },
+              { "field": "degree_level", "type": "varchar(50)", "nullable": "No", "default": "" },
+              { "field": "generation", "type": "varchar(10)", "nullable": "Yes", "default": "NULL" },
+              { "field": "graduation_year", "type": "varchar(10)", "nullable": "Yes", "default": "NULL" },
+              { "field": "phone", "type": "varchar(60)", "nullable": "Yes", "default": "NULL" },
+              { "field": "job_position", "type": "varchar(80)", "nullable": "Yes", "default": "NULL" },
+              { "field": "current_job", "type": "varchar(80)", "nullable": "Yes", "default": "NULL" },
+              { "field": "profile_image", "type": "varchar(255)", "nullable": "Yes", "default": "NULL" },
+              { "field": "other_files", "type": "varchar(255)", "nullable": "Yes", "default": "NULL" },
+              { "field": "created_at", "type": "timestamp", "nullable": "Yes", "default": "NULL" },
+              { "field": "updated_at", "type": "timestamp", "nullable": "Yes", "default": "NULL" }
+            ]
+          },
+          {
+            "name": "migrations",
+            "cols": 3,
+            "description": "Laravel migration tracking",
+            "fields": []
+          },
+          {
+            "name": "news_files",
+            "cols": 5,
+            "description": "News article file attachments",
+            "fields": []
+          },
+          {
+            "name": "news_posts",
+            "cols": 14,
+            "description": "News/articles with views counter and publish-date scheduling",
+            "fields": []
+          },
+          {
+            "name": "password_reset_tokens",
+            "cols": 3,
+            "description": "Password reset token storage",
+            "fields": []
+          },
+          {
+            "name": "payments",
+            "cols": 10,
+            "description": "Payment slip verification workflow (5-state ENUM)",
+            "fields": []
+          },
+          {
+            "name": "places",
+            "cols": 4,
+            "description": "Place reference directories",
+            "fields": []
+          },
+          {
+            "name": "profiles",
+            "cols": 15,
+            "description": "Extended user profiles (social links, bio, employment)",
+            "fields": []
+          },
+          {
+            "name": "satisfactions",
+            "cols": 5,
+            "description": "Satisfaction survey scores",
+            "fields": []
+          },
+          {
+            "name": "sessions",
+            "cols": 6,
+            "description": "PHP session storage with serialised payload",
+            "fields": []
+          },
+          {
+            "name": "users",
+            "cols": 10,
+            "description": "Authentication base with RBAC (student_id, usertype)",
+            "fields": []
+          }
+        ]
       }
     ]
   },
