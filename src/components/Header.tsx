@@ -114,6 +114,15 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
                         onClick={closeMenu}
                       />
                     ))}
+                    <a
+                      href="/Resume_Teeraphat_Lansantad.pdf"
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={closeMenu}
+                      className="block transition md:px-4 text-gray-500 hover:text-black"
+                    >
+                      <span>RESUME</span>
+                    </a>
                   </div>
                 </div>
 

@@ -1,4 +1,4 @@
-import { BiLogoGithub, BiLogoLinkedin, BiEnvelope } from 'react-icons/bi'
+import { BiDownload, BiLogoFacebook, BiLogoGithub, BiLogoLinkedin, BiEnvelope } from 'react-icons/bi'
 import { Container } from '../components/Container'
 
 export const Contact: React.FC = () => {
@@ -18,8 +18,20 @@ export const Contact: React.FC = () => {
     {
       label: 'Email',
       value: 'tlansantad@gmail.com',
-      href: 'mailto:tlansantad@gmail.com',
+      href: 'https://mail.google.com/mail/?view=cm&fs=1&to=tlansantad@gmail.com',
       icon: <BiEnvelope className="w-5 h-5" />,
+    },
+    {
+      label: 'Facebook',
+      value: 'facebook.com/teeraphat.lansantad',
+      href: 'https://www.facebook.com/tor.lansantad.teeraphat',
+      icon: <BiLogoFacebook className="w-5 h-5" />,
+    },
+    {
+      label: 'Resume',
+      value: 'Download PDF',
+      href: '/Resume_Teeraphat_Lansantad.pdf',
+      icon: <BiDownload className="w-5 h-5" />,
     },
   ]
 

@@ -83,6 +83,14 @@ export const HeroSection: React.FC = () => {
               >
                 Get in Touch
               </button>
+              <a
+                href="/Resume_Teeraphat_Lansantad.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="flex h-11 w-full items-center justify-center px-6 border border-gray-300 text-gray-700 text-sm font-medium transition hover:border-gray-900 hover:text-gray-900 sm:w-max"
+              >
+                Download Resume
+              </a>
             </div>
 
             <div className="hidden py-6 mt-8 border-t border-b border-gray-200 sm:flex justify-between">
