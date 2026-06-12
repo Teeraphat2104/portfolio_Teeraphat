@@ -12,7 +12,7 @@ export const BlogSection: React.FC = () => {
     <div id="blog">
       <Container>
         <div className="mb-6 space-y-2">
-          <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">04.</div>
+          <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">03.</div>
           <h2 className="text-3xl font-medium text-gray-900 md:text-4xl">Selected Projects</h2>
           <p className="lg:w-6/12 text-gray-600">
             A selection of non-trivial architectural solutions addressing consistency, distribution, and real-time operations.

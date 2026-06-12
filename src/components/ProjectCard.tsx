@@ -1,12 +1,12 @@
-import { useNavigate } from 'react-router-dom'
-import type { ProjectMeta } from '../types'
+import { useNavigate } from "react-router-dom";
+import type { ProjectMeta } from "../types";
 
 interface ProjectCardProps {
-  project: ProjectMeta
+  project: ProjectMeta;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <div
@@ -15,7 +15,9 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
     >
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex-1 min-w-0">
-          <span className="text-xs text-gray-400 tracking-wider block mb-1.5">PROJECT</span>
+          <span className="text-xs text-gray-400 tracking-wider block mb-1.5">
+            PROJECT
+          </span>
           <h3 className="text-xl md:text-2xl font-medium text-gray-900 leading-snug group-hover:text-black transition-colors">
             {project.title}
           </h3>
@@ -40,5 +42,5 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
