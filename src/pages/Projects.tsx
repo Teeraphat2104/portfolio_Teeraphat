@@ -9,10 +9,10 @@ export const ProjectsPage: React.FC = () => {
  <div className="pt-24 pb-16 animate-[fadeIn_0.8s_ease-out]">
  <Container>
  <div className="md:w-2/3 lg:w-1/2 mb-16">
- <h1 className="text-3xl md:text-4xl font-bold text-gray-800 ">
- All Projects
- </h1>
- <p className="mt-4 text-gray-600 leading-relaxed">
+  <h1 className="text-3xl md:text-4xl font-bold text-moss">
+  All Projects
+  </h1>
+  <p className="mt-4 text-moss/80 leading-relaxed">
  A selection of non-trivial architectural solutions addressing consistency, distribution, and real-time operations.
  </p>
  </div>
@@ -23,7 +23,7 @@ export const ProjectsPage: React.FC = () => {
  </div>
  {projects.length === 0 && (
  <div className="text-center py-20">
- <p className="text-gray-400 font-mono text-sm">No projects yet.</p>
+  <p className="text-sage text-sm">No projects yet.</p>
  </div>
  )}
  </Container>
