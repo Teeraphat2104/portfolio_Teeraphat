@@ -35,7 +35,7 @@ A production-grade PDF management platform purpose-built for university academic
 
 ### High-Level Structure
 
-```
+```cmd
 university-database-system/
 ├── prisma/             # Database schema + seed
 ├── public/             # Static assets
