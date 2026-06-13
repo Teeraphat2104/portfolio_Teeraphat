@@ -42,6 +42,49 @@ flowchart TB
 
 The system follows a monolithic Laravel architecture with clear separation of concerns. The Blade frontend communicates with the Laravel backend through RESTful JSON APIs. Core business logic is distributed across three controllers, each responsible for a distinct domain: booking, barber management, and point-of-sale.
 
+### Database Schema
+
+```mermaid
+erDiagram
+    Customer ||--o{ Appointment : books
+    Barber ||--o{ Appointment : serves
+    Appointment ||--o| Transaction : has
+
+    Customer {
+        int id PK
+        string name
+        string phone
+        string email
+        datetime created_at
+    }
+
+    Barber {
+        int id PK
+        string name
+        string specialty
+        boolean active
+    }
+
+    Appointment {
+        int id PK
+        int customer_id FK
+        int barber_id FK
+        datetime slot_start
+        datetime slot_end
+        enum status
+        int queue_position
+    }
+
+    Transaction {
+        int id PK
+        int appointment_id FK
+        decimal amount
+        enum payment_method
+        enum status
+        datetime paid_at
+    }
+```
+
 ## System Flow
 
 1. Customer browses available time slots via the Blade UI

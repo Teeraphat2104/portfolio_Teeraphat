@@ -136,173 +136,110 @@ sequenceDiagram
 - **Silk Pink Rarity Rule:** Primary accent color (`#e91e63`) used on 10% or less of the UI to maintain focus.
 - **Thai-First:** `Bai Jamjuree` used across all levels for optimal Thai-Latin legibility.
 
-### 7. Database Schema — 24 Tables
+### 7. Database Schema
 
-```table-group
-[
-  {
-    "name": "activity",
-    "cols": 12,
-    "description": "Place-based activity scheduling with PDF/file upload support",
-    "fields": []
-  },
-  {
-    "name": "banners",
-    "cols": 5,
-    "description": "Ordered homepage banner rotation",
-    "fields": []
-  },
-  {
-    "name": "blogs",
-    "cols": 7,
-    "description": "Blog posts with pending/approved status workflow",
-    "fields": []
-  },
-  {
-    "name": "blog_likes",
-    "cols": 4,
-    "description": "User likes on blog posts",
-    "fields": []
-  },
-  {
-    "name": "cache",
-    "cols": 3,
-    "description": "Laravel cache key-value store",
-    "fields": []
-  },
-  {
-    "name": "cache_locks",
-    "cols": 3,
-    "description": "Atomic cache lock entries",
-    "fields": []
-  },
-  {
-    "name": "cardex",
-    "cols": 4,
-    "description": "Student academic record cards",
-    "fields": []
-  },
-  {
-    "name": "comments",
-    "cols": 5,
-    "description": "Blog post comments",
-    "fields": []
-  },
-  {
-    "name": "daily_logins",
-    "cols": 5,
-    "description": "Per-user daily login count tracker",
-    "fields": []
-  },
-  {
-    "name": "dormitories",
-    "cols": 19,
-    "description": "Dormitory listings with pricing and images",
-    "fields": []
-  },
-  {
-    "name": "dorm_images",
-    "cols": 4,
-    "description": "Additional dormitory gallery images",
-    "fields": []
-  },
-  {
-    "name": "forms",
-    "cols": 10,
-    "description": "Dynamic EAV form definitions with slugs",
-    "fields": []
-  },
-  {
-    "name": "form_responses",
-    "cols": 14,
-    "description": "Form submissions with payment tracking and file uploads",
-    "fields": []
-  },
-  {
-    "name": "import_data",
-    "cols": 19,
-    "description": "Bulk alumni data import (Thai ID, academics, employment)",
-    "fields": [
-      { "field": "id", "type": "bigint", "nullable": "No", "default": "" },
-      { "field": "thai_id", "type": "varchar(13)", "nullable": "Yes", "default": "NULL" },
-      { "field": "student_id", "type": "varchar(9)", "nullable": "No", "default": "" },
-      { "field": "title", "type": "varchar(10)", "nullable": "No", "default": "" },
-      { "field": "name", "type": "varchar(50)", "nullable": "No", "default": "" },
-      { "field": "lastname", "type": "varchar(50)", "nullable": "No", "default": "" },
-      { "field": "course", "type": "varchar(50)", "nullable": "Yes", "default": "NULL" },
-      { "field": "faculty", "type": "varchar(50)", "nullable": "No", "default": "" },
-      { "field": "major", "type": "varchar(50)", "nullable": "Yes", "default": "NULL" },
-      { "field": "degree_level", "type": "varchar(50)", "nullable": "No", "default": "" },
-      { "field": "generation", "type": "varchar(10)", "nullable": "Yes", "default": "NULL" },
-      { "field": "graduation_year", "type": "varchar(10)", "nullable": "Yes", "default": "NULL" },
-      { "field": "phone", "type": "varchar(60)", "nullable": "Yes", "default": "NULL" },
-      { "field": "job_position", "type": "varchar(80)", "nullable": "Yes", "default": "NULL" },
-      { "field": "current_job", "type": "varchar(80)", "nullable": "Yes", "default": "NULL" },
-      { "field": "profile_image", "type": "varchar(255)", "nullable": "Yes", "default": "NULL" },
-      { "field": "other_files", "type": "varchar(255)", "nullable": "Yes", "default": "NULL" },
-      { "field": "created_at", "type": "timestamp", "nullable": "Yes", "default": "NULL" },
-      { "field": "updated_at", "type": "timestamp", "nullable": "Yes", "default": "NULL" }
-    ]
-  },
-  {
-    "name": "migrations",
-    "cols": 3,
-    "description": "Laravel migration tracking",
-    "fields": []
-  },
-  {
-    "name": "news_files",
-    "cols": 5,
-    "description": "News article file attachments",
-    "fields": []
-  },
-  {
-    "name": "news_posts",
-    "cols": 14,
-    "description": "News/articles with views counter and publish-date scheduling",
-    "fields": []
-  },
-  {
-    "name": "password_reset_tokens",
-    "cols": 3,
-    "description": "Password reset token storage",
-    "fields": []
-  },
-  {
-    "name": "payments",
-    "cols": 10,
-    "description": "Payment slip verification workflow (5-state ENUM)",
-    "fields": []
-  },
-  {
-    "name": "places",
-    "cols": 4,
-    "description": "Place reference directories",
-    "fields": []
-  },
-  {
-    "name": "profiles",
-    "cols": 15,
-    "description": "Extended user profiles (social links, bio, employment)",
-    "fields": []
-  },
-  {
-    "name": "satisfactions",
-    "cols": 5,
-    "description": "Satisfaction survey scores",
-    "fields": []
-  },
-  {
-    "name": "sessions",
-    "cols": 6,
-    "description": "PHP session storage with serialised payload",
-    "fields": []
-  },
-  {
-    "name": "users",
-    "cols": 10,
-    "description": "Authentication base with RBAC (student_id, usertype)",
-    "fields": []
-  }
-]
+```mermaid
+erDiagram
+    Alumni ||--|| User : has_account
+    User ||--o{ Payment : verifies
+    Form ||--o{ FormField : contains
+    Form ||--o{ FormResponse : receives
+    Alumni ||--o{ FormResponse : submits
+    User ||--o{ Blog : authors
+    User ||--o{ Comment : writes
+    Alumni ||--o{ Dormitory : lists
+
+    User {
+        int id PK
+        string student_id
+        string name
+        string email
+        string password
+        enum usertype
+        datetime created_at
+    }
+
+    Alumni {
+        int id PK
+        string student_id
+        string thai_id
+        string name
+        string lastname
+        string course
+        string faculty
+        string major
+        string degree_level
+        string generation
+        int graduation_year
+        string phone
+        string job_position
+        string current_job
+        string profile_image
+    }
+
+    Payment {
+        int id PK
+        int user_id FK
+        string slip_path
+        decimal amount
+        enum status
+        int verified_by FK
+        text admin_note
+        datetime verified_at
+    }
+
+    Form {
+        int id PK
+        string slug
+        string name
+        boolean active
+    }
+
+    FormField {
+        int id PK
+        int form_id FK
+        string label
+        string field_type
+        text validation_rules
+        int sort_order
+        boolean required
+    }
+
+    FormResponse {
+        int id PK
+        int form_id FK
+        int alumni_id FK
+        json values
+        text admin_note
+        enum payment_status
+        string slip_path
+        datetime submitted_at
+    }
+
+    Blog {
+        int id PK
+        int user_id FK
+        string title
+        text content
+        enum status
+        int views
+        datetime published_at
+    }
+
+    Comment {
+        int id PK
+        int user_id FK
+        int blog_id FK
+        text content
+        boolean approved
+    }
+
+    Dormitory {
+        int id PK
+        int alumni_id FK
+        string name
+        decimal price
+        string location
+        text description
+    }
 ```
