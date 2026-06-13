@@ -1,18 +1,14 @@
 import { BiArrowBack, BiPlayCircle } from 'react-icons/bi'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { getProjectById } from '../lib/projects'
 import { getTechIcon } from '../lib/techIcons'
 import { MermaidRenderer } from '../components/MermaidRenderer'
 import { Container } from '../components/Container'
-import type { Section } from '../types'
-
-function renderInline(text: string): string {
-  return text
-    .replace(/`([^`]+)`/g, '<code class="font-mono text-sm bg-gray-100 px-1.5 py-0.5 border border-gray-200 text-gray-800">$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
-    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-gray-800 underline underline-offset-2 decoration-gray-300 hover:decoration-gray-800 transition-colors">$1</a>')
-}
+import type { Components } from 'react-markdown'
+import type { TableSchema } from '../types'
 
 function highlightJsonLike(code: string): string {
   const esc = code
@@ -62,163 +58,85 @@ function highlightJsonLike(code: string): string {
   }).join('\n')
 }
 
-function SectionRenderer({ sections }: { sections: Section[] }) {
+function TableGroup({ tables }: { tables: TableSchema[] }) {
   return (
-    <div className="bg-white border border-gray-200 p-6 md:p-8">
-      {sections.map((section, i) => {
-        switch (section.type) {
-          case 'heading': {
-            const text = renderInline(section.text)
-            const shared = 'font-medium text-gray-900 tracking-tight'
-            switch (section.level) {
-              case 1: return <h1 key={i} className={`${shared} text-2xl mt-10 mb-4`} dangerouslySetInnerHTML={{ __html: text }} />
-              case 2: return <h2 key={i} className={`${shared} text-xl mt-8 mb-3 border-b border-gray-200 pb-2`} dangerouslySetInnerHTML={{ __html: text }} />
-              case 3: return <h3 key={i} className={`${shared} text-lg mt-6 mb-3`} dangerouslySetInnerHTML={{ __html: text }} />
-              default: return <h4 key={i} className={`${shared} text-base mt-4 mb-2`} dangerouslySetInnerHTML={{ __html: text }} />
-            }
-          }
-          case 'paragraph':
-            return (
-              <p
-                key={i}
-                className="text-base text-gray-600 leading-relaxed mb-4"
-                dangerouslySetInnerHTML={{ __html: renderInline(section.text) }}
-              />
-            )
-          case 'mermaid':
-            return <div key={i} className="mb-6"><MermaidRenderer code={section.code} /></div>
-          case 'code': {
-            const isHighlighted = ['json', 'yaml', 'bash', 'ts', 'tsx'].includes(section.lang)
-            return (
-              <div key={i} className="mb-6">
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-100 border border-gray-200 border-b-0">
-                  <span className="w-2 h-2 bg-gray-400" />
-                  <span className="w-2 h-2 bg-gray-300" />
-                  <span className="w-2 h-2 bg-gray-400" />
-                  <span className="text-xs tracking-wider text-gray-500 ml-2">{section.lang}</span>
-                </div>
-                <pre className="bg-white border border-gray-200 p-5 overflow-x-auto text-sm leading-relaxed font-mono">
-                  {isHighlighted ? (
-                    <code dangerouslySetInnerHTML={{ __html: highlightJsonLike(section.code) }} />
-                  ) : (
-                    <code>{section.code}</code>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+      {tables.map((table, j) => (
+        <div key={j} className="border border-gray-200 bg-white">
+          <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+            <span className="text-sm font-medium text-gray-900">{table.name}</span>
+            <span className="text-xs text-gray-400 tabular-nums">{table.cols} cols</span>
+          </div>
+          {table.fields.length > 0 && (
+            <div className="divide-y divide-gray-100">
+              {table.fields.map((f, k) => (
+                <div key={k} className="px-4 py-2 text-xs text-gray-600 flex items-baseline gap-2">
+                  <span className="font-mono text-gray-900">{f.field}</span>
+                  <span className="text-gray-400">{f.type}</span>
+                  <span className={f.nullable === 'No' ? 'text-gray-900' : 'text-gray-400'}>
+                    {f.nullable === 'No' ? '\u00B7 NOT NULL' : '\u00B7 nullable'}
+                  </span>
+                  {f.default && f.default !== '' && f.default !== 'NULL' && (
+                    <span className="text-gray-400">\u00B7 default {f.default}</span>
                   )}
-                </pre>
-              </div>
-            )
-          }
-          case 'list': {
-            const ListTag = section.ordered ? 'ol' : 'ul'
-            const listClasses = section.ordered
-              ? 'space-y-1.5 mb-4 ml-5 list-decimal marker:text-gray-400'
-              : 'space-y-1.5 mb-4 ml-5 list-disc marker:text-gray-400'
-            return (
-              <ListTag key={i} className={listClasses}>
-                {section.items.map((item, j) => (
-                  <li
-                    key={j}
-                    className="text-base text-gray-600 leading-relaxed pl-1"
-                    dangerouslySetInnerHTML={{ __html: renderInline(item) }}
-                  />
-                ))}
-              </ListTag>
-            )
-          }
-          case 'table':
-            return (
-              <div key={i} className="overflow-x-auto mb-6">
-                <table className="w-full border-collapse text-sm">
-                  <thead>
-                    <tr>
-                      {section.headers.map((h, j) => (
-                        <th
-                          key={j}
-                          className="border border-gray-200 bg-gray-50 px-4 py-2 text-left font-medium text-gray-900"
-                          dangerouslySetInnerHTML={{ __html: renderInline(h) }}
-                        />
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {section.rows.map((row, j) => (
-                      <tr key={j}>
-                        {row.map((cell, k) => (
-                          <td
-                            key={k}
-                            className="border border-gray-200 px-4 py-2 text-gray-600"
-                            dangerouslySetInnerHTML={{ __html: renderInline(cell) }}
-                          />
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )
-          case 'fieldGrid':
-            return (
-              <div key={i} className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-                {section.fields.map((f, j) => (
-                  <div key={j} className="border border-gray-200 p-3 bg-white">
-                    <div className="text-sm font-medium text-gray-900 mb-1">{f.field}</div>
-                    <div className="text-xs text-gray-500 space-y-0.5">
-                      <span>{f.type}</span>
-                      <span className="mx-0.5">·</span>
-                      <span className={f.nullable === 'No' ? '' : ''}>{f.nullable}</span>
-                      {f.default && <><span className="mx-0.5">·</span><span>{f.default || '-'}</span></>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          case 'tableGroup':
-            return (
-              <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                {section.tables.map((table, j) => (
-                  <div key={j} className="border border-gray-200 bg-white">
-                    <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-                      <span className="text-sm font-medium text-gray-900">{table.name}</span>
-                      <span className="text-xs text-gray-400 tabular-nums">{table.cols} cols</span>
-                    </div>
-                    {table.fields.length > 0 && (
-                      <div className="divide-y divide-gray-100">
-                        {table.fields.map((f, k) => (
-                          <div key={k} className="px-4 py-2 text-xs text-gray-600 flex items-baseline gap-2">
-                            <span className="font-mono text-gray-900">{f.field}</span>
-                            <span className="text-gray-400">{f.type}</span>
-                            <span className={f.nullable === 'No' ? 'text-gray-900' : 'text-gray-400'}>
-                              {f.nullable === 'No' ? '· NOT NULL' : '· nullable'}
-                            </span>
-                            {f.default && f.default !== '' && f.default !== 'NULL' && (
-                              <span className="text-gray-400">· default {f.default}</span>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <div className="px-4 py-2.5 border-t border-gray-200">
-                      <span className="text-xs text-gray-500 leading-relaxed">{table.description}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )
-          case 'blockquote':
-            return (
-              <blockquote
-                key={i}
-                className="border-l-4 border-gray-300 pl-4 py-1 mb-4 text-gray-500 italic"
-                dangerouslySetInnerHTML={{ __html: renderInline(section.text) }}
-              />
-            )
-          case 'hr':
-            return <hr key={i} className="border-t border-gray-200 my-8" />
-          default:
-            return null
-        }
-      })}
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="px-4 py-2.5 border-t border-gray-200">
+            <span className="text-xs text-gray-500 leading-relaxed">{table.description}</span>
+          </div>
+        </div>
+      ))}
     </div>
   )
+}
+
+const markdownComponents: Components = {
+  a: ({ href, children }) => (
+    <a href={href} target="_blank" rel="noreferrer">{children}</a>
+  ),
+  code: ({ className, children }) => {
+    const lang = className?.replace('language-', '') || ''
+    const code = String(children).replace(/\n$/, '')
+
+    if (lang === 'mermaid') {
+      return <div className="mb-6"><MermaidRenderer code={code} /></div>
+    }
+
+    if (lang === 'table-group') {
+      try {
+        const tables = JSON.parse(code) as TableSchema[]
+        return <TableGroup tables={tables} />
+      } catch {
+        return <pre className="bg-red-50 border border-red-200 p-4 text-sm text-red-700">Invalid table-group JSON</pre>
+      }
+    }
+
+    if (!className) {
+      return <code className="font-mono text-sm bg-gray-100 px-1.5 py-0.5 border border-gray-200 text-gray-800">{children}</code>
+    }
+
+    const isHighlighted = ['json', 'yaml', 'bash', 'ts', 'tsx'].includes(lang)
+    return (
+      <div className="mb-6">
+        <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-100 border border-gray-200 border-b-0">
+          <span className="w-2 h-2 bg-gray-400" />
+          <span className="w-2 h-2 bg-gray-300" />
+          <span className="w-2 h-2 bg-gray-400" />
+          <span className="text-xs tracking-wider text-gray-500 ml-2">{lang}</span>
+        </div>
+        <pre className="bg-white border border-gray-200 p-5 overflow-x-auto text-sm leading-relaxed font-mono">
+          {isHighlighted ? (
+            <code dangerouslySetInnerHTML={{ __html: highlightJsonLike(code) }} />
+          ) : (
+            <code>{code}</code>
+          )}
+        </pre>
+      </div>
+    )
+  },
+  pre: ({ children }) => <>{children}</>,
 }
 
 export const ProjectDetail: React.FC = () => {
@@ -239,14 +157,6 @@ export const ProjectDetail: React.FC = () => {
       </div>
     )
   }
-
-  const challengeSectionIdx = project.sections.findIndex(
-    (s) => s.type === 'heading' && (s.text === 'Challenges & Solutions' || s.text.startsWith('Challenges'))
-  )
-
-  const overviewSections = challengeSectionIdx >= 0
-    ? project.sections.slice(0, challengeSectionIdx)
-    : project.sections
 
   return (
     <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
@@ -330,7 +240,14 @@ export const ProjectDetail: React.FC = () => {
 
         <div className="prose-custom">
           {activeTab === 'overview' ? (
-            <SectionRenderer sections={overviewSections} />
+            <div className="prose prose-gray max-w-none bg-white border border-gray-200 p-6 md:p-8">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={markdownComponents}
+              >
+                {project.body}
+              </ReactMarkdown>
+            </div>
           ) : (
             <div className="space-y-6">
               {project.challenges.map((c, i) => (

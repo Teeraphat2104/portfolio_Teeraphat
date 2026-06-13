@@ -22,18 +22,6 @@ export interface TableSchema {
   fields: FieldDef[]
 }
 
-export type Section =
-  | { type: 'heading'; level: 1 | 2 | 3 | 4 | 5 | 6; text: string }
-  | { type: 'paragraph'; text: string }
-  | { type: 'mermaid'; code: string }
-  | { type: 'code'; lang: string; code: string }
-  | { type: 'list'; ordered: boolean; items: string[] }
-  | { type: 'table'; headers: string[]; rows: string[][] }
-  | { type: 'fieldGrid'; fields: FieldDef[] }
-  | { type: 'tableGroup'; tables: TableSchema[] }
-  | { type: 'blockquote'; text: string }
-  | { type: 'hr' }
-
 export interface ProjectMeta {
   id: string
   title: string
@@ -44,5 +32,5 @@ export interface ProjectMeta {
   challenges: ProjectChallenge[]
   github: string
   demo?: string
-  sections: Section[]
+  body: string
 }
