@@ -21,45 +21,60 @@ function highlightJsonLike(code: string): string {
     .map((line) => {
       const tokens: string[] = [];
       let i = 0;
+
       while (i < line.length) {
         const rest = line.slice(i);
+
+        // JSON Key
         const key = rest.match(/^("(?:[^"\\]|\\.)*?")\s*(?=:)/);
         if (key) {
-          tokens.push(`<span class="text-gray-700">${key[1]}</span>`);
+          tokens.push(
+            `<span class="text-slate-900 font-medium">${key[1]}</span>`,
+          );
           i += key[0].length;
           continue;
         }
+
+        // String Value
         const str = rest.match(/^"(?:[^"\\]|\\.)*?"/);
         if (str) {
-          tokens.push(`<span class="text-gray-600">${str[0]}</span>`);
+          tokens.push(`<span class="text-emerald-700">${str[0]}</span>`);
           i += str[0].length;
           continue;
         }
+
+        // Types / Keywords
         const typ = rest.match(
           /^(boolean|string|number|object|array|null|undefined|never|any|void|symbol|bigint|true|false)\b/,
         );
         if (typ) {
           tokens.push(
-            `<span class="text-gray-800 font-semibold">${typ[0]}</span>`,
+            `<span class="text-violet-700 font-semibold">${typ[0]}</span>`,
           );
           i += typ[0].length;
           continue;
         }
+
+        // Numbers
         const num = rest.match(/^(\d+\.?\d*)\b/);
         if (num) {
-          tokens.push(`<span class="text-gray-500">${num[0]}</span>`);
+          tokens.push(`<span class="text-blue-700">${num[0]}</span>`);
           i += num[0].length;
           continue;
         }
+
+        // Comments
         const com = rest.match(/^(\/\/.*)/);
         if (com) {
-          tokens.push(`<span class="text-gray-400 italic">${com[0]}</span>`);
+          tokens.push(`<span class="text-slate-500 italic">${com[0]}</span>`);
           i += com[0].length;
           continue;
         }
+
         tokens.push(line[i]);
         i++;
       }
+
       return tokens.join("");
     })
     .join("\n");
@@ -118,17 +133,23 @@ function TableGroup({ tables }: { tables: TableSchema[] }) {
 
 const markdownComponents: Components = {
   a: ({ href, children }) => (
-    <a href={href} target="_blank" rel="noreferrer">
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+    >
       {children}
     </a>
   ),
+
   code: ({ className, children }) => {
     const lang = className?.replace("language-", "") || "";
     const code = String(children).replace(/\n$/, "");
 
     if (lang === "mermaid") {
       return (
-        <div className="mb-6">
+        <div className="mb-8 overflow-x-auto">
           <MermaidRenderer code={code} />
         </div>
       );
@@ -140,36 +161,44 @@ const markdownComponents: Components = {
         return <TableGroup tables={tables} />;
       } catch {
         return (
-          <pre className="bg-red-50 border border-red-200 p-4 text-sm text-red-700">
+          <pre className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
             Invalid table-group JSON
           </pre>
         );
       }
     }
 
+    // Inline Code
     if (!className) {
       return (
-        <code className="font-mono text-sm bg-gray-100 px-1.5 py-0.5 border border-gray-200 text-gray-800">
+        <code className="font-mono text-sm bg-slate-100 text-slate-800 border border-slate-200 rounded-md px-1.5 py-0.5">
           {children}
         </code>
       );
     }
 
     const isHighlighted = ["json", "yaml", "bash", "ts", "tsx"].includes(lang);
+
     return (
-      <div className="mb-6">
-        <div className="flex items-center gap-2 px-4 py-1.5 bg-gray-100 border border-gray-200 border-b-0">
-          <span className="w-2 h-2 bg-gray-400" />
-          <span className="w-2 h-2 bg-gray-300" />
-          <span className="w-2 h-2 bg-gray-400" />
-          <span className="text-xs tracking-wider text-gray-500 ml-2">
+      <div className="mb-8 overflow-hidden rounded-xl border border-slate-200 shadow-sm">
+        {/* Header */}
+        <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 border-b border-slate-200">
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+          <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+
+          <span className="ml-2 text-xs font-medium uppercase tracking-wider text-slate-600">
             {lang}
           </span>
         </div>
-        <pre className="bg-white border border-gray-200 p-5 overflow-x-auto text-sm leading-relaxed font-mono">
+
+        {/* Code */}
+        <pre className="bg-slate-50 p-5 overflow-x-auto text-sm leading-7 font-mono text-slate-800">
           {isHighlighted ? (
             <code
-              dangerouslySetInnerHTML={{ __html: highlightJsonLike(code) }}
+              dangerouslySetInnerHTML={{
+                __html: highlightJsonLike(code),
+              }}
             />
           ) : (
             <code>{code}</code>
@@ -178,6 +207,7 @@ const markdownComponents: Components = {
       </div>
     );
   },
+
   pre: ({ children }) => <>{children}</>,
 };
 
@@ -294,7 +324,7 @@ export const ProjectDetail: React.FC = () => {
 
         <div className="prose-custom">
           {activeTab === "overview" ? (
-            <div className="prose prose-gray max-w-none bg-white border border-gray-200 p-6 md:p-8">
+            <div className="prose prose-slate max-w-none bg-white border border-slate-200 rounded-xl p-8 md:p-10 shadow-sm">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={markdownComponents}
