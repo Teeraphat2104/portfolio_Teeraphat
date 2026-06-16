@@ -7,8 +7,6 @@ export const Home: React.FC = () => {
   return (
     <div className="space-y-20 mb-20">
       <HeroSection />
-      <FeaturesSection />
-      <StatsSection />
       <BlogSection />
     </div>
   );

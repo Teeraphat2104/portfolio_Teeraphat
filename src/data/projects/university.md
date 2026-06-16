@@ -14,6 +14,7 @@ metrics:
   - label: SEARCH
     value: Regex Multi-Field
 github: https://github.com/example/university-database-system
+demo: https://university-database-system.vercel.app/
 challenges:
   - problem: "MongoDB lacks native JOINs, making relational queries with Prisma's MongoDB provider limited compared to SQL providers."
     solution: "Used embedded ObjectId references with Prisma's `include` for eager-loading related documents across User to Pdf and Category to Pdf relationships."

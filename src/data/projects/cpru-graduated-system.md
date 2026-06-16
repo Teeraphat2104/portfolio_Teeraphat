@@ -12,6 +12,7 @@ metrics:
   - label: ASSET DELIVERY
     value: Signed URLs
 github: https://github.com/example/cpru-graduated-system
+demo: http://202.29.51.239/
 challenges:
   - problem: "Transitioning from paper-based alumni registration to a fully digital, auditable workflow with state integrity guarantees."
     solution: "Implemented a formal State Machine with atomic locks for payment verification, recording every state change in audit logs with actor, timestamp, and reason."

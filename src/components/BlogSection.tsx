@@ -1,4 +1,4 @@
-import { BiRightArrowAlt } from 'react-icons/bi'
+import { BiPlayCircle, BiRightArrowAlt } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
 import { Container } from './Container'
 import { getAllProjectMetas } from '../lib/projects'
@@ -13,7 +13,7 @@ export const BlogSection: React.FC = () => {
     <div id="blog">
       <Container>
         <div className="mb-6 space-y-2">
-          <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">03.</div>
+          <div className="text-xs text-gray-400 tracking-[0.2em] mb-2">01.</div>
           <h2 className="text-3xl font-medium text-gray-900 md:text-4xl">Selected Projects</h2>
           <p className="lg:w-6/12 text-gray-600">
             A selection of non-trivial architectural solutions addressing consistency, distribution, and real-time operations.
@@ -24,9 +24,9 @@ export const BlogSection: React.FC = () => {
             <div
               key={project.id}
               onClick={() => navigate(`/projects/${project.id}`)}
-              className="group p-6 sm:p-8 bg-white border border-gray-200 cursor-pointer transition-all duration-300 hover:border-gray-400"
+              className="group p-6 sm:p-8 bg-white border border-gray-200 cursor-pointer transition-all duration-300 hover:border-gray-400 flex flex-col h-full"
             >
-              <div className="relative">
+              <div className="relative flex-1 flex flex-col">
                 <span className="text-xs text-gray-400 tracking-wider block mb-2">
                   {project.role}
                 </span>
@@ -50,10 +50,26 @@ export const BlogSection: React.FC = () => {
                     )
                   })}
                 </div>
-                <span className="inline-flex items-center gap-1 text-gray-700 text-sm font-medium">
-                  View project
-                  <BiRightArrowAlt className="w-4 h-4" />
-                </span>
+                <div className="border-t border-gray-200 pt-4 mt-auto flex items-center justify-between">
+                  {project.demo && (
+                    <a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex h-11 items-center justify-center px-6 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900"
+                    >
+                      <span className="relative flex items-center gap-2">
+                        <BiPlayCircle className="w-4 h-4" />
+                        Live Demo
+                      </span>
+                    </a>
+                  )}
+                  <span className="inline-flex items-center gap-1 text-gray-700 text-sm font-medium ml-auto">
+                    View project
+                    <BiRightArrowAlt className="w-4 h-4" />
+                  </span>
+                </div>
               </div>
             </div>
           ))}
