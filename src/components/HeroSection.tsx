@@ -27,7 +27,7 @@ export const HeroSection: React.FC = () => {
   }, [])
 
   return (
-    <div className="relative pt-12 pb-20 md:pt-20 md:pb-28">
+    <div className="relative pt-12 pb-20 md:pt-20 md:pb-20">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
           {/* LEFT: identity */}
