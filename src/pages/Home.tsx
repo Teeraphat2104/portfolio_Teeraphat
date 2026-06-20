@@ -3,7 +3,7 @@ import { BlogSection } from "../components/BlogSection";
 
 export const Home: React.FC = () => {
   return (
-    <div className="space-y-20 mb-20">
+    <div>
       <HeroSection />
       <BlogSection />
     </div>

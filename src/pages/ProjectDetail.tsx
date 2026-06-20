@@ -10,6 +10,17 @@ import { Container } from "../components/Container";
 import type { Components } from "react-markdown";
 import type { TableSchema } from "../types";
 
+const tagColors: Record<string, string> = {
+  React: 'bg-blue-soft text-blue-deep border-blue/15',
+  TypeScript: 'bg-blue-soft text-blue-deep border-blue/15',
+  'Next.js': 'bg-ink/5 text-ink border-ink/10',
+  'Node.js': 'bg-mint-soft text-mint-deep border-mint/15',
+  PostgreSQL: 'bg-blue-soft text-blue-deep border-blue/15',
+  MongoDB: 'bg-mint-soft text-mint-deep border-mint/15',
+  Go: 'bg-blue-soft text-blue-deep border-blue/15',
+  Laravel: 'bg-ink/5 text-ink border-ink/10',
+}
+
 function highlightJsonLike(code: string): string {
   const esc = code
     .replace(/&/g, "&amp;")
@@ -25,48 +36,43 @@ function highlightJsonLike(code: string): string {
       while (i < line.length) {
         const rest = line.slice(i);
 
-        // JSON Key
         const key = rest.match(/^("(?:[^"\\]|\\.)*?")\s*(?=:)/);
         if (key) {
           tokens.push(
-            `<span class="text-slate-900 font-medium">${key[1]}</span>`,
+            `<span style="color: var(--color-ink); font-weight: 500">${key[1]}</span>`,
           );
           i += key[0].length;
           continue;
         }
 
-        // String Value
         const str = rest.match(/^"(?:[^"\\]|\\.)*?"/);
         if (str) {
-          tokens.push(`<span class="text-emerald-700">${str[0]}</span>`);
+          tokens.push(`<span style="color: var(--color-mint-deep)">${str[0]}</span>`);
           i += str[0].length;
           continue;
         }
 
-        // Types / Keywords
         const typ = rest.match(
           /^(boolean|string|number|object|array|null|undefined|never|any|void|symbol|bigint|true|false)\b/,
         );
         if (typ) {
           tokens.push(
-            `<span class="text-violet-700 font-semibold">${typ[0]}</span>`,
+            `<span style="color: var(--color-blue); font-weight: 600">${typ[0]}</span>`,
           );
           i += typ[0].length;
           continue;
         }
 
-        // Numbers
         const num = rest.match(/^(\d+\.?\d*)\b/);
         if (num) {
-          tokens.push(`<span class="text-blue-700">${num[0]}</span>`);
+          tokens.push(`<span style="color: var(--color-blue)">${num[0]}</span>`);
           i += num[0].length;
           continue;
         }
 
-        // Comments
         const com = rest.match(/^(\/\/.*)/);
         if (com) {
-          tokens.push(`<span class="text-slate-500 italic">${com[0]}</span>`);
+          tokens.push(`<span style="color: var(--color-muted); font-style: italic">${com[0]}</span>`);
           i += com[0].length;
           continue;
         }
@@ -84,44 +90,44 @@ function TableGroup({ tables }: { tables: TableSchema[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
       {tables.map((table, j) => (
-        <div key={j} className="border border-gray-200 bg-white">
-          <div className="px-4 py-2.5 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-900">
+        <div key={j} className="border border-rule bg-white rounded-xl overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-rule bg-paper flex items-center justify-between">
+            <span className="text-sm font-medium text-ink mono">
               {table.name}
             </span>
-            <span className="text-xs text-gray-400 tabular-nums">
+            <span className="text-xs text-muted mono tabular-nums">
               {table.cols} cols
             </span>
           </div>
           {table.fields.length > 0 && (
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-rule">
               {table.fields.map((f, k) => (
                 <div
                   key={k}
-                  className="px-4 py-2 text-xs text-gray-600 flex items-baseline gap-2"
+                  className="px-4 py-2 text-xs text-body flex items-baseline gap-2"
                 >
-                  <span className="font-mono text-gray-900">{f.field}</span>
-                  <span className="text-gray-400">{f.type}</span>
+                  <span className="font-mono text-ink">{f.field}</span>
+                  <span className="text-muted">{f.type}</span>
                   <span
                     className={
-                      f.nullable === "No" ? "text-gray-900" : "text-gray-400"
+                      f.nullable === "No" ? "text-ink" : "text-muted"
                     }
                   >
                     {f.nullable === "No"
-                      ? "\u00B7 NOT NULL"
-                      : "\u00B7 nullable"}
+                      ? "· NOT NULL"
+                      : "· nullable"}
                   </span>
                   {f.default && f.default !== "" && f.default !== "NULL" && (
-                    <span className="text-gray-400">
-                      \u00B7 default {f.default}
+                    <span className="text-muted">
+                      · default {f.default}
                     </span>
                   )}
                 </div>
               ))}
             </div>
           )}
-          <div className="px-4 py-2.5 border-t border-gray-200">
-            <span className="text-xs text-gray-500 leading-relaxed">
+          <div className="px-4 py-2.5 border-t border-rule">
+            <span className="text-xs text-muted leading-relaxed">
               {table.description}
             </span>
           </div>
@@ -137,7 +143,7 @@ const markdownComponents: Components = {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="text-blue-600 hover:text-blue-700 underline underline-offset-2 transition-colors"
+      className="text-blue hover:text-blue-deep underline underline-offset-2 transition-colors"
     >
       {children}
     </a>
@@ -161,17 +167,16 @@ const markdownComponents: Components = {
         return <TableGroup tables={tables} />;
       } catch {
         return (
-          <pre className="bg-red-50 border border-red-200 rounded-lg p-4 text-sm text-red-700">
+          <pre className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
             Invalid table-group JSON
           </pre>
         );
       }
     }
 
-    // Inline Code
     if (!className) {
       return (
-        <code className="font-mono text-sm bg-slate-100 text-slate-800 border border-slate-200 rounded-md px-1.5 py-0.5">
+        <code className="font-mono text-sm bg-paper text-ink border border-rule rounded-md px-1.5 py-0.5">
           {children}
         </code>
       );
@@ -180,20 +185,16 @@ const markdownComponents: Components = {
     const isHighlighted = ["json", "yaml", "bash", "ts", "tsx"].includes(lang);
 
     return (
-      <div className="mb-8 overflow-hidden rounded-xl border border-slate-200 shadow-sm">
-        {/* Header */}
-        <div className="flex items-center gap-2 px-4 py-2 bg-slate-100 border-b border-slate-200">
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-          <span className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-
-          <span className="ml-2 text-xs font-medium uppercase tracking-wider text-slate-600">
+      <div className="mb-8 overflow-hidden rounded-xl border border-rule">
+        <div className="flex items-center gap-2 px-4 py-2 bg-paper border-b border-rule">
+          <span className="w-2.5 h-2.5 rounded-full bg-rule-strong" />
+          <span className="w-2.5 h-2.5 rounded-full bg-rule" />
+          <span className="w-2.5 h-2.5 rounded-full bg-rule-strong" />
+          <span className="ml-2 text-xs font-medium uppercase tracking-wider text-muted mono">
             {lang}
           </span>
         </div>
-
-        {/* Code */}
-        <pre className="bg-slate-50 p-5 overflow-x-auto text-sm leading-7 font-mono text-slate-800">
+        <pre className="bg-white p-5 overflow-x-auto text-sm leading-7 font-mono text-ink">
           {isHighlighted ? (
             <code
               dangerouslySetInnerHTML={{
@@ -221,12 +222,12 @@ export const ProjectDetail: React.FC = () => {
 
   if (!project) {
     return (
-      <div className="pt-16 text-center">
+      <div className="pt-32 text-center animate-[fadeIn_0.8s_ease-out]">
         <Container>
-          <h1 className="text-2xl font-medium text-gray-900 mb-4">
+          <h1 className="display text-3xl font-semibold text-ink mb-4">
             Project not found
           </h1>
-          <Link to="/projects" className="text-gray-700 hover:underline">
+          <Link to="/projects" className="text-blue hover:text-blue-deep hover:underline">
             ← Back to projects
           </Link>
         </Container>
@@ -235,33 +236,40 @@ export const ProjectDetail: React.FC = () => {
   }
 
   return (
-    <div className="pt-16 pb-10 animate-[fadeIn_0.8s_ease-out]">
+    <div className="pt-24 md:pt-32 pb-16 md:pb-24 animate-[fadeIn_0.8s_ease-out]">
       <Container>
         <button
           onClick={() => navigate("/projects")}
-          className="group text-sm text-gray-400 hover:text-black transition-colors inline-flex items-center gap-2 mb-6"
+          className="group text-sm text-muted hover:text-ink transition-colors inline-flex items-center gap-2 mb-8 mono"
         >
           <BiArrowBack className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-          BACK TO PROJECTS
+          back to projects
         </button>
 
-        <div className="flex justify-between items-baseline flex-wrap gap-2 mb-3">
-          <h1 className="text-3xl md:text-4xl font-medium text-gray-900 tracking-tight">
+        <div className="flex items-start gap-3 mb-5">
+          <span className="text-xs font-medium text-mint-deep mono uppercase tracking-[0.2em]">/case_study</span>
+          <span className="h-px w-8 bg-mint/40 mt-2" />
+        </div>
+
+        <div className="flex flex-wrap items-baseline gap-3 mb-4">
+          <h1 className="display text-4xl md:text-5xl xl:text-6xl font-semibold text-ink tracking-[-0.025em] leading-[1.05]">
             {project.title}
           </h1>
-          <span className="text-sm text-gray-400">{project.role}</span>
+          <span className="text-sm text-muted mono">{project.role}</span>
         </div>
-        <p className="text-base text-gray-600 max-w-3xl mb-6 leading-relaxed">
+        <p className="text-base md:text-lg text-body max-w-3xl mb-8 leading-relaxed">
           {project.description}
         </p>
 
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-8">
           {project.technologies.map((tech) => {
             const Icon = getTechIcon(tech);
             return (
               <span
                 key={tech}
-                className="inline-flex items-center gap-1.5 text-sm px-2.5 py-1 border border-gray-200 bg-white text-gray-600 hover:border-gray-400 hover:text-gray-900 transition-all"
+                className={`inline-flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 border rounded-md mono ${
+                  tagColors[tech] || 'bg-paper text-ink border-rule'
+                }`}
               >
                 {Icon && <Icon className="w-3.5 h-3.5" />}
                 {tech}
@@ -275,32 +283,41 @@ export const ProjectDetail: React.FC = () => {
             href={project.demo}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center justify-center px-6 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900 mb-10"
+            className="inline-flex h-11 items-center justify-center gap-2 px-5 bg-mint text-white text-sm font-medium rounded-full transition hover:bg-mint-deep active:scale-[0.98] mb-12"
           >
-            <span className="relative flex items-center gap-2">
-              <BiPlayCircle className="w-4 h-4" />
-              Live Demo
-            </span>
+            <BiPlayCircle className="w-4 h-4" />
+            Open live demo
           </a>
         )}
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-          {project.metrics.map((metric) => (
-            <div
-              key={metric.label}
-              className="p-5 bg-gray-50 border border-gray-200 flex flex-col gap-1.5"
-            >
-              <span className="text-xs text-gray-400 tracking-wider">
-                {metric.label}
-              </span>
-              <span className="text-base font-medium text-gray-900 tabular-nums">
-                {metric.value}
-              </span>
-            </div>
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-12">
+          {project.metrics.map((metric, i) => {
+            const isMint = i % 2 === 0
+            return (
+              <div
+                key={metric.label}
+                className={`p-5 md:p-6 border rounded-2xl ${
+                  isMint
+                    ? 'bg-mint-soft/40 border-mint/20'
+                    : 'bg-blue-soft/40 border-blue/20'
+                }`}
+              >
+                <span className={`text-[10px] font-semibold uppercase tracking-[0.15em] mono ${
+                  isMint ? 'text-mint-deep' : 'text-blue-deep'
+                }`}>
+                  {metric.label}
+                </span>
+                <span className={`mt-2 block display text-2xl md:text-3xl font-semibold tabular-nums ${
+                  isMint ? 'text-mint-deep' : 'text-blue-deep'
+                }`}>
+                  {metric.value}
+                </span>
+              </div>
+            )
+          })}
         </div>
 
-        <div className="flex gap-1 mb-8 border-b border-gray-200">
+        <div className="flex gap-1 mb-8 border-b border-rule">
           {[
             { key: "overview" as const, label: "Architecture & Flow" },
             { key: "challenges" as const, label: "Challenges & Solutions" },
@@ -308,23 +325,23 @@ export const ProjectDetail: React.FC = () => {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`relative px-5 py-2.5 text-sm font-medium transition-colors ${
+              className={`relative px-5 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab.key
-                  ? "text-black"
-                  : "text-gray-400 hover:text-gray-900"
+                  ? "text-ink"
+                  : "text-muted hover:text-ink"
               }`}
             >
               {tab.label}
               {activeTab === tab.key && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-mint" />
               )}
             </button>
           ))}
         </div>
 
-        <div className="prose-custom">
+        <div>
           {activeTab === "overview" ? (
-            <div className="prose prose-slate max-w-none bg-white border border-slate-200 rounded-xl p-8 md:p-10 shadow-sm">
+            <div className="prose prose-slate max-w-none bg-white border border-rule rounded-2xl p-8 md:p-10">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={markdownComponents}
@@ -333,28 +350,28 @@ export const ProjectDetail: React.FC = () => {
               </ReactMarkdown>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="space-y-4">
               {project.challenges.map((c, i) => (
                 <div
                   key={i}
-                  className="bg-white border border-gray-200 p-6 md:p-8"
+                  className="bg-white border border-rule rounded-2xl p-6 md:p-8"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="flex-shrink-0 w-8 h-8 bg-gray-100 border border-gray-200 flex items-center justify-center text-sm font-medium text-gray-700">
-                      {i + 1}
+                    <span className="flex-shrink-0 w-9 h-9 bg-mint-soft border border-mint/20 rounded-lg flex items-center justify-center text-sm font-semibold text-mint-deep mono">
+                      {String(i + 1).padStart(2, '0')}
                     </span>
-                    <div className="flex-1">
-                      <span className="text-xs tracking-wider block mb-1.5 text-red-600">
-                        PROBLEM
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-semibold tracking-[0.15em] block mb-1.5 text-red-600 mono uppercase">
+                        Problem
                       </span>
-                      <p className="text-base text-gray-900 leading-relaxed">
+                      <p className="text-base text-ink leading-relaxed">
                         {c.problem}
                       </p>
-                      <div className="w-8 h-px bg-gray-200 my-5" />
-                      <span className="text-xs tracking-wider block mb-1.5 text-green-600">
-                        SOLUTION
+                      <div className="w-8 h-px bg-rule my-5" />
+                      <span className="text-[10px] font-semibold tracking-[0.15em] block mb-1.5 text-mint-deep mono uppercase">
+                        Solution
                       </span>
-                      <p className="text-base text-gray-600 leading-relaxed">
+                      <p className="text-base text-body leading-relaxed">
                         {c.solution}
                       </p>
                     </div>

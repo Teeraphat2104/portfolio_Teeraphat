@@ -9,8 +9,8 @@ const NavLink: React.FC<{ to: string; label: string; isActive: boolean; onClick:
   <Link
     to={to}
     onClick={onClick}
-    className={`block transition md:px-4 ${
-      isActive ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'
+    className={`block transition-colors text-sm md:text-[13px] font-medium tracking-wide ${
+      isActive ? 'text-ink' : 'text-muted hover:text-ink'
     }`}
   >
     <span>{label}</span>
@@ -33,30 +33,32 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
   }, [simple])
 
   const navLinks = [
-    { path: '/', label: 'HOME' },
-    { path: '/projects', label: 'PROJECTS' },
-    { path: '/about', label: 'ABOUT' },
-    { path: '/contact', label: 'CONTACT' },
+    { path: '/', label: 'Home' },
+    { path: '/projects', label: 'Work' },
+    { path: '/about', label: 'About' },
+    { path: '/contact', label: 'Contact' },
   ]
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || simple
-          ? 'bg-white/75 backdrop-blur-2xl border-b border-gray-200'
+        isScrolled || simple || menuOpen
+          ? 'bg-paper/85 backdrop-blur-xl border-b border-rule'
           : 'bg-transparent border-b border-transparent'
-      } ${menuOpen ? 'bg-white' : ''}`}
+      }`}
     >
-        <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="relative flex flex-wrap items-center justify-between gap-6 py-2 md:gap-0 md:py-3">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 md:gap-0 md:py-4">
           <div className="relative z-20 flex w-full justify-between md:px-0 lg:w-fit">
-            <Link to="/" onClick={closeMenu} aria-label="logo" className="flex items-center space-x-2">
-              <div aria-hidden="true" className="flex space-x-1">
-                <div className="size-3 bg-black" />
-                <div className="h-5 w-0.5 bg-black" />
-              </div>
-              <span className="text-base font-medium text-black tracking-tight">
-                {simple ? '<- TEERAPHAT.SYS[ENG]' : 'TEERAPHAT.SYS[ENG]'}
+            <Link to="/" onClick={closeMenu} aria-label="logo" className="flex items-center gap-2 group">
+              <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-ink text-white display font-semibold text-sm">
+                T
+              </span>
+              <span className="text-[15px] font-semibold text-ink tracking-tight display">
+                teeraphat
+              </span>
+              <span className="text-[11px] text-muted mono hidden sm:inline-block ml-1 mt-0.5">
+                · engineer
               </span>
             </Link>
 
@@ -68,13 +70,13 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
               >
                 <div
                   aria-hidden="true"
-                  className={`m-auto h-px w-5 bg-black transition duration-300 origin-top ${
+                  className={`m-auto h-px w-5 bg-ink transition duration-300 origin-top ${
                     menuOpen ? 'rotate-45 translate-y-px' : ''
                   }`}
                 />
                 <div
                   aria-hidden="true"
-                  className={`m-auto mt-1.5 h-px w-5 bg-black transition duration-300 origin-bottom ${
+                  className={`m-auto mt-1.5 h-px w-5 bg-ink transition duration-300 origin-bottom ${
                     menuOpen ? '-rotate-45 -translate-y-px' : ''
                   }`}
                 />
@@ -85,26 +87,26 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
           {simple ? (
             <button
               onClick={() => navigate('/')}
-              className="text-xs text-gray-400 hover:text-black transition-colors"
+              className="text-xs text-muted hover:text-ink transition-colors mono"
             >
-              {'<- BACK'}
+              ← back
             </button>
           ) : (
             <>
               <div
                 aria-hidden="true"
-                className={`fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-white/70 backdrop-blur-2xl transition duration-500 lg:hidden ${
+                className={`fixed inset-0 z-10 h-screen w-screen origin-bottom scale-y-0 bg-paper/95 backdrop-blur-2xl transition duration-500 lg:hidden ${
                   menuOpen ? 'origin-top scale-y-100' : ''
                 }`}
                 onClick={closeMenu}
               />
               <div
-                className={`invisible absolute top-full left-0 z-20 w-full origin-top-right translate-y-1 scale-90 flex-col flex-wrap justify-end gap-6 border border-gray-200 bg-white p-8 opacity-0 transition-all duration-300 lg:visible lg:relative lg:flex lg:w-fit lg:translate-y-0 lg:scale-100 lg:flex-row lg:items-center lg:gap-0 lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 ${
+                className={`invisible absolute top-full left-0 z-20 w-full origin-top-right translate-y-1 scale-90 flex-col flex-wrap justify-end gap-6 border border-rule bg-paper p-8 opacity-0 transition-all duration-300 lg:visible lg:relative lg:flex lg:w-fit lg:translate-y-0 lg:scale-100 lg:flex-row lg:items-center lg:gap-8 lg:border-none lg:bg-transparent lg:p-0 lg:opacity-100 ${
                   menuOpen ? 'visible scale-100 opacity-100' : ''
                 }`}
               >
-                <div className="w-full text-gray-500 lg:w-auto lg:pr-4 lg:pt-0">
-                  <div className="flex flex-col gap-6 tracking-wide lg:flex-row lg:gap-0 lg:text-sm">
+                <div className="w-full lg:w-auto">
+                  <div className="flex flex-col gap-5 lg:flex-row lg:gap-8 lg:items-center">
                     {navLinks.map((link) => (
                       <NavLink
                         key={link.path}
@@ -119,19 +121,19 @@ export const Header: React.FC<HeaderProps> = ({ simple }) => {
                       target="_blank"
                       rel="noreferrer"
                       onClick={closeMenu}
-                      className="block transition md:px-4 text-gray-500 hover:text-black"
+                      className="block text-sm font-medium text-muted hover:text-ink transition-colors tracking-wide"
                     >
-                      <span>RESUME</span>
+                      Resume
                     </a>
                   </div>
                 </div>
 
-                <div className="mt-6 lg:mt-0">
+                <div className="mt-2 lg:mt-0">
                   <button
                     onClick={() => { closeMenu(); navigate('/contact') }}
-                    className="flex h-9 items-center justify-center px-4 bg-black text-white text-sm font-medium transition hover:bg-gray-800 active:bg-gray-900 sm:w-max"
+                    className="inline-flex h-10 items-center justify-center px-5 bg-mint text-white text-sm font-medium rounded-full transition hover:bg-mint-deep active:scale-[0.98]"
                   >
-                    Get in Touch
+                    Hire me
                   </button>
                 </div>
               </div>

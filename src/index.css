@@ -2,8 +2,23 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --color-paper: #F4F1EA;
+  --color-surface: #FFFFFF;
+  --color-ink: #0F172A;
+  --color-body: #475569;
+  --color-muted: #64748B;
+  --color-rule: #E5E0D0;
+  --color-rule-strong: #D6D0BE;
+  --color-mint: #00A86B;
+  --color-mint-deep: #008855;
+  --color-mint-soft: #DCF4E6;
+  --color-blue: #2563EB;
+  --color-blue-deep: #1D4ED8;
+  --color-blue-soft: #DBEAFE;
 }
 
 @layer base {
@@ -15,38 +30,29 @@
   }
   body {
     font-family: var(--font-sans);
-    background-color: #FFFFFF;
-    color: #171717;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     line-height: 1.6;
     letter-spacing: -0.01em;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background-image:
-      linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
-    background-size: 64px 64px;
+    font-feature-settings: 'cv11', 'ss01';
   }
   ::selection {
-    background-color: #171717;
+    background-color: var(--color-mint);
     color: #FFFFFF;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-sans);
-    font-weight: 500;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    color: var(--color-ink);
   }
   p {
-    color: #525252;
+    color: var(--color-body);
   }
   a {
     color: inherit;
@@ -59,9 +65,10 @@
   code {
     font-family: var(--font-mono);
     font-size: 0.9em;
-    background: #F5F5F5;
+    background: #FFFFFF;
     padding: 0.2em 0.4em;
-    border: 1px solid #E5E5E5;
+    border: 1px solid var(--color-rule);
+    color: var(--color-ink);
   }
 }
 
@@ -70,16 +77,22 @@
     width: 6px;
   }
   .scrollbar-thin::-webkit-scrollbar-track {
-    background: #FFFFFF;
+    background: var(--color-paper);
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background: #E5E5E5;
+    background: var(--color-rule);
   }
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background: #A3A3A3;
+    background: var(--color-rule-strong);
   }
   .tabular-nums {
     font-variant-numeric: tabular-nums;
+  }
+  .display {
+    font-family: var(--font-display);
+  }
+  .mono {
+    font-family: var(--font-mono);
   }
 }
 
@@ -90,4 +103,14 @@
 
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
